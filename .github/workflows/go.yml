@@ -20,8 +20,8 @@ jobs:
 
     - name: Build
       run: make build
-    - name: Display github.workspace
-      run: ls ${{ github.workspace }} / dist
+    - name: Display all dists
+      run: ls dist
   
 #     - name: Test
 #       run: go test -v ./...
