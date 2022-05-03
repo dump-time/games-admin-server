@@ -7,6 +7,23 @@ on:
     branches: [ main ]
 
 jobs:
+  notify:
+    name: NOTIFY_TELEGRAM
+    runs-on: ubuntu-latest
+    steps:
+      - name: send telegram message
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.PROJECT_GROUP_ID }}
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          message: |
+            ${{ github.actor }} created commit:
+            Commit message: ${{ github.event.commits[0].message }}
+            
+            Repository: ${{ github.repository }}
+            
+            See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}} 
+
   build:
     runs-on: ubuntu-latest
     steps:
@@ -22,7 +39,7 @@ jobs:
     - name: Display all dists
       run: ls dist
   
-    - name: Deploy to Server
+    - name: Upload programme to Server
       uses: easingthemes/ssh-deploy@main
       env:
           SSH_PRIVATE_KEY: ${{ secrets.NODE_SERVER_SSH_PRIVATE_KEY }}
@@ -38,6 +55,6 @@ jobs:
     needs: build
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v3
 
     
