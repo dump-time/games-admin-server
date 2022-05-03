@@ -26,7 +26,7 @@ jobs:
       uses: easingthemes/ssh-deploy@main
       env:
           SSH_PRIVATE_KEY: ${{ secrets.NODE_SERVER_SSH_PRIVATE_KEY }}
-          ARGS: "-rltgoDzvO --delete"
+          ARGS: "-rltgoDzvO"
           SOURCE: "" 
           REMOTE_HOST: ${{ secrets.NODE_SERVER_HOST }}
           REMOTE_USER: ${{ secrets.NODE_SERVER_USER }}
