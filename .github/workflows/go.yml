@@ -21,14 +21,7 @@ jobs:
       run: make build
     - name: Display all dists
       run: ls dist
-    
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-
-    steps:
-    - uses: actions/checkout@v1
-
+  
     - name: Deploy to Server
       uses: easingthemes/ssh-deploy@main
       env:
@@ -39,3 +32,12 @@ jobs:
           REMOTE_USER: ${{ secrets.NODE_SERVER_USER}}
           TARGET: ${{ secrets.NODE_SERVER_TARGET}}
           EXCLUDE: ""   
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+    - uses: actions/checkout@v1
+
+    
