@@ -25,12 +25,12 @@ jobs:
     - name: Deploy to Server
       uses: easingthemes/ssh-deploy@main
       env:
-          SSH_PRIVATE_KEY: ${{ secrets.NODE_SERVER_SSH_PRIVATE_KEY}}
+          SSH_PRIVATE_KEY: ${{ secrets.NODE_SERVER_SSH_PRIVATE_KEY }}
           ARGS: "-rltgoDzvO --delete"
-          SOURCE: "dist/" 
+          SOURCE: "" 
           REMOTE_HOST: ${{ secrets.NODE_SERVER_HOST }}
-          REMOTE_USER: ${{ secrets.NODE_SERVER_USER}}
-          TARGET: ${{ secrets.NODE_SERVER_TARGET}}
+          REMOTE_USER: ${{ secrets.NODE_SERVER_USER }}
+          TARGET: ${{ secrets.NODE_SERVER_TARGET }}
           EXCLUDE: ""   
 
   deploy:
