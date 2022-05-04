@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/fvbock/endless"
 	"github.com/gin-gonic/gin"
 	"log"
@@ -21,9 +22,9 @@ func main() {
 	// daemon mode
 	if *daemonMode {
 		server.BeforeBegin = func(add string) {
-			// Log pid
+			// stdout pid
 			pid := os.Getpid()
-			log.Printf("[INFO] Deamon started: %v\n", pid)
+			fmt.Printf("[INFO] Deamon started: %v\n", pid)
 		}
 	}
 
