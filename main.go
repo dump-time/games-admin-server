@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"lixiao189/games-admin-server/global"
+	"lixiao189/games-admin-server/util"
 	"log"
 	"os"
 
@@ -29,7 +30,7 @@ func main() {
 		server.BeforeBegin = func(add string) {
 			// stdout pid
 			pid := os.Getpid()
-			fmt.Printf("[INFO] Deamon started: %v\n", pid)
+			util.InfoLog(fmt.Sprintf("Deamon started: %v", pid))	
 		}
 	}
 
