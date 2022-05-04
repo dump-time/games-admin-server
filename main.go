@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"flag"
 	"fmt"
 	"github.com/fvbock/endless"
 	"github.com/gin-gonic/gin"
@@ -10,13 +9,7 @@ import (
 	"os"
 )
 
-// define runtime args
-var daemon = flag.Bool("d", false, "Run in daemon mode")
-
 func main() {
-	// Parse args
-	flag.Parse()
-
 	router := gin.Default()
 	router.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
@@ -28,7 +21,7 @@ func main() {
 	server := endless.NewServer(":8083", router)
 
 	// daemon mode
-	if *daemon {
+	if *daemonMode {
 		server.BeforeBegin = func(add string) {
 			// Saving pid info
 			pid := os.Getpid()
