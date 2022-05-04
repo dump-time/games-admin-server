@@ -1,19 +1,30 @@
 OUTPUT_DIR = ./dist
-PID = $$(cat $(OUTPUT_DIR)/pid.txt)
+OUTPUT_BIN = games-admin-server.out
+LOG_FILE = out.log
 
+.PHONY: build
 build:
-	go build -o $(OUTPUT_DIR)/games-admin-server.out
-stop:
-	@echo "The pid is: "$(PID)
-	@kill -15 $(PID)
-	@rm $(OUTPUT_DIR)/pid.txt
-	@echo "Killed"
-serve:
-	@if [ -e $(OUTPUT_DIR)/pid.txt ]; then make stop; fi
-	
-	@make build
+	go build -o $(OUTPUT_DIR)/$(OUTPUT_BIN)
+	@chmod +x $(OUTPUT_DIR)/$(OUTPUT_BIN)
 
-	@chmod +x $(OUTPUT_DIR)/games-admin-server.out
-	@nohup $(OUTPUT_DIR)/games-admin-server.out >$(OUTPUT_DIR)/log.out 2>&1 &
-	
-	@echo "Server start, all file is in dist file"
+.PHONY: stop
+stop:
+	@if [ -e $(OUTPUT_DIR)/pid.txt ]; then \
+	  	pid=`cat $(OUTPUT_DIR)/pid.txt` && \
+		kill -15 $$pid && \
+		rm $(OUTPUT_DIR)/pid.txt && \
+		echo "Killed $$pid" ; \
+	fi
+
+.PHONY: start
+start: stop build
+	@nohup $(OUTPUT_DIR)/$(OUTPUT_BIN) -d > $(OUTPUT_DIR)/$(LOG_FILE) 2>&1 & echo $$! > $(OUTPUT_DIR)/pid.txt
+	@echo "Server started, all file is in dist directory"
+
+.PHONY: run
+run: build
+	@$(OUTPUT_DIR)/$(OUTPUT_BIN)
+
+.PHONY: clean
+clean: stop
+	@rm -rf $(OUTPUT_DIR)

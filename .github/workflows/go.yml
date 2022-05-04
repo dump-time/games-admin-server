@@ -46,5 +46,5 @@ jobs:
         key: ${{ secrets.NODE_SERVER_SSH_PRIVATE_KEY }}
         script: |
           cd ${{ secrets.NODE_SERVER_TARGET }}
-          make serve
+          make start
     
