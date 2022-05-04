@@ -16,3 +16,6 @@ vendor/
 
 # dist files
 dist/
+
+# IDE/Editor
+.idea/
