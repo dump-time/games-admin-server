@@ -2,14 +2,14 @@
 	Define runtime args
 */
 
-package main
+package global
 
 import "flag"
 
 // daemonMode run server in daemon mode
-var daemonMode = flag.Bool("d", false, "Run server in daemon mode")
+var DaemonMode = flag.Bool("d", false, "Run server in daemon mode")
 
-func init() {
+func InitFlag() {
 	// init flags
 	flag.Parse()
 }

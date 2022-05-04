@@ -2,13 +2,18 @@ package main
 
 import (
 	"fmt"
-	"github.com/fvbock/endless"
-	"github.com/gin-gonic/gin"
+	"lixiao189/games-admin-server/global"
 	"log"
 	"os"
+
+	"github.com/fvbock/endless"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
+	// Initial functions 
+	global.InitFlag()
+
 	router := gin.Default()
 	router.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
@@ -20,7 +25,7 @@ func main() {
 	server := endless.NewServer(":8083", router)
 
 	// daemon mode
-	if *daemonMode {
+	if *global.DaemonMode {
 		server.BeforeBegin = func(add string) {
 			// stdout pid
 			pid := os.Getpid()
