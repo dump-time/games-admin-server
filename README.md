@@ -21,6 +21,12 @@ make run
 make build
 ```
 
+### 配置文件
+
+本程序通过 -config 参数指定配置文件路径，其中 config 文件路径默认为当前目录下的 config.yml
+
+项目根目录下有一个 config.example.yml 的文件，是配置文件的模板。
+
 ### 后台服务
 
 **启动服务**
