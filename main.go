@@ -2,17 +2,15 @@ package main
 
 import (
 	"fmt"
-	"lixiao189/games-admin-server/global"
-	"lixiao189/games-admin-server/log"
-	"os"
-
 	"github.com/fvbock/endless"
 	"github.com/gin-gonic/gin"
+	"lixiao189/games-admin-server/global"
+	"lixiao189/games-admin-server/log"
+	"net"
+	"os"
 )
 
 func main() {
-	// Initial functions
-
 	router := gin.Default()
 	router.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
@@ -32,7 +30,14 @@ func main() {
 		}
 	}
 
+	// Start server
 	if err := server.ListenAndServe(); err != nil {
-		log.Error(err)
+		switch err.(type) {
+		case *net.OpError:
+			log.Warn(err)
+		default:
+			log.Fatal(err)
+		}
 	}
+
 }
