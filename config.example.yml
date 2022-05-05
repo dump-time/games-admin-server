@@ -1,5 +1,7 @@
+serv:
+  addr: "localhost:8083"
 db:
-  name: ''
-  port: ''
-  user: ''
-  pass: ''
+  name: 'localhost'
+  port: '3389'
+  user: 'root'
+  pass: 'root'

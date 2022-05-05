@@ -3,8 +3,7 @@ package main
 import (
 	"fmt"
 	"lixiao189/games-admin-server/global"
-	"lixiao189/games-admin-server/util"
-	"log"
+	"lixiao189/games-admin-server/log"
 	"os"
 
 	"github.com/fvbock/endless"
@@ -12,8 +11,7 @@ import (
 )
 
 func main() {
-	// Initial functions 
-	global.InitFlag()
+	// Initial functions
 
 	router := gin.Default()
 	router.GET("/ping", func(c *gin.Context) {
@@ -23,18 +21,18 @@ func main() {
 	})
 
 	// Start server gracefully
-	server := endless.NewServer(":8083", router)
+	server := endless.NewServer(global.Config.Serv.Addr, router)
 
 	// daemon mode
 	if *global.DaemonMode {
 		server.BeforeBegin = func(add string) {
 			// stdout pid
 			pid := os.Getpid()
-			util.InfoLog(fmt.Sprintf("Deamon started: %v", pid))	
+			log.Info(fmt.Sprintf("Deamon started: %v", pid))
 		}
 	}
 
 	if err := server.ListenAndServe(); err != nil {
-		log.Println(err)
+		log.Error(err)
 	}
 }
