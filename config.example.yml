@@ -1,7 +1,8 @@
 serv:
   addr: "localhost:8083"
 db:
-  name: 'localhost'
+  host: 'localhost'
   port: '3389'
   user: 'root'
-  pass: 'root'
+  pass: ''
+  name: 'games_admin'

@@ -11,10 +11,11 @@ type configType struct {
 		Addr string
 	}
 	DB struct {
-		Hostname string `yaml:"name"`
+		Hostname string `yaml:"host"`
 		Port     string
 		Username string `yaml:"user"`
 		Password string `yaml:"pass"`
+		DBName   string `yaml:"name"`
 	}
 }
 
