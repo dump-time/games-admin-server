@@ -1,4 +1,4 @@
-@startuml
+@startuml database_er
 ' hide the spot
 hide circle
 
@@ -27,8 +27,8 @@ entity "Group" as g {
     * id : number <<generated>>
     ---
     * name : varchar
-    * belonging : varchar
-    * job : job
+    * organizaion : varchar
+    * code : varchar
 }
 
 ' 志愿者
@@ -43,7 +43,7 @@ entity "Volunteer" as v {
     * avatar : varchar
     * intention : varchar
     * experience : text
-    * contact : text
+    * tel : text
     job_id : number
 }
 
@@ -53,12 +53,13 @@ entity "Job" as j {
     ---
     * group_id : number
     * name : varchar
-    * content : text
-    * location : text
+    * content : varchar
+    * location : varchar
 }
 
-g ||..|| a2
-g ||..o| v
-g ||..o| j
-
+g ||..|{ a2
+g ||..|{ v
+g ||..|{ j
+v |o--o{ j
+'
 @enduml
