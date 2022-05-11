@@ -15,11 +15,11 @@ entity "Admin" as a1 {
 
 ' 团队管理员
 entity "Group_Admin" as a2  {
-        * id : number <<generated>>
-        ---
-        * group_id : number
-        * username : varchar
-        * password : varchar(32) <<MD5>>
+    * id : number <<generated>>
+    ---
+    * group_id : number
+    * username : varchar
+    * password : varchar(32) <<MD5>>
 }
 
 ' 团队
@@ -60,6 +60,6 @@ entity "Job" as j {
 g ||..|{ a2
 g ||..|{ v
 g ||..|{ j
-v |o--o{ j
+v }o--o| j
 '
 @enduml
