@@ -8,7 +8,8 @@ import (
 
 type configType struct {
 	Serv struct {
-		Addr string
+		Addr           string
+		TrustedProxies []string `yaml:"proxies"`
 	}
 	DB struct {
 		Hostname string `yaml:"host"`
