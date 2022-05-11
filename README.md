@@ -2,6 +2,8 @@
 
 一个迫真亚运会志愿者管理系统后端 😝
 
+[![Go](https://github.com/dump-time/games-admin-server/actions/workflows/go.yml/badge.svg)](https://github.com/dump-time/games-admin-server/actions/workflows/go.yml)
+
 ## 部署准备 🏋️
 
 - nohup 用来后台执行程序
