@@ -2,9 +2,9 @@ package global
 
 import (
 	"fmt"
+	"github.com/dump-time/games-admin-server/log"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"lixiao189/games-admin-server/log"
 )
 
 // DB is global database object

@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
+	"github.com/dump-time/games-admin-server/global"
+	"github.com/dump-time/games-admin-server/log"
+	"github.com/dump-time/games-admin-server/router"
 	"github.com/fvbock/endless"
-	"lixiao189/games-admin-server/global"
-	"lixiao189/games-admin-server/log"
-	"lixiao189/games-admin-server/router"
 	"net"
 	"os"
 )

@@ -1,8 +1,8 @@
 package global
 
 import (
+	"github.com/dump-time/games-admin-server/log"
 	"gopkg.in/yaml.v2"
-	"lixiao189/games-admin-server/log"
 	"os"
 )
 

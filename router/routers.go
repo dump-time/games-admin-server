@@ -2,9 +2,9 @@ package router
 
 import (
 	"fmt"
+	"github.com/dump-time/games-admin-server/global"
+	"github.com/dump-time/games-admin-server/log"
 	"github.com/gin-gonic/gin"
-	"lixiao189/games-admin-server/global"
-	"lixiao189/games-admin-server/log"
 	"time"
 )
 

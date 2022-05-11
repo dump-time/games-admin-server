@@ -1,4 +1,4 @@
-module lixiao189/games-admin-server
+module github.com/dump-time/games-admin-server
 
 go 1.17
 
