@@ -1,0 +1,38 @@
+name: deploy
+
+on: workflow_dispatch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.18
+
+      - name: Build
+        run: make build
+
+      - name: Upload program to server
+        uses: easingthemes/ssh-deploy@main
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.NODE_SERVER_SSH_PRIVATE_KEY }}
+          ARGS: "-rltgoDzvO"
+          SOURCE: ""
+          REMOTE_HOST: ${{ secrets.NODE_SERVER_HOST }}
+          REMOTE_USER: ${{ secrets.NODE_SERVER_USER }}
+          TARGET: ${{ secrets.NODE_SERVER_TARGET }}
+          EXCLUDE: ""
+
+      - name: run server program on node's remote server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.NODE_SERVER_HOST }}
+          username: ${{ secrets.NODE_SERVER_USER }}
+          key: ${{ secrets.NODE_SERVER_SSH_PRIVATE_KEY }}
+          script: |
+            cd ${{ secrets.NODE_SERVER_TARGET }}
+            make start
