@@ -19,5 +19,6 @@ dist/
 
 # IDE/Editor
 .idea/
+.vscode/
 
 config.yml
