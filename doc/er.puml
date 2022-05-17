@@ -43,7 +43,7 @@ entity "Volunteer" as v {
     * avatar : varchar
     * intention : varchar
     * experience : text
-    * tel : text
+    * tel : varchar
     job_id : number
 }
 
