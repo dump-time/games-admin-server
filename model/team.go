@@ -9,6 +9,7 @@ type Team struct {
 	Organization string
 	Code         string
 
+	TeamAdmins []TeamAdmin `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	Volunteers []Volunteer `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
-	Jobs       []Job       `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	Jobs       []Job       `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
