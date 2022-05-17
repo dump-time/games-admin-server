@@ -2,12 +2,14 @@ package main
 
 import (
 	"fmt"
-	"github.com/dump-time/games-admin-server/global"
-	"github.com/dump-time/games-admin-server/log"
-	"github.com/dump-time/games-admin-server/router"
-	"github.com/fvbock/endless"
 	"net"
 	"os"
+
+	"github.com/dump-time/games-admin-server/global"
+	"github.com/dump-time/games-admin-server/log"
+	_ "github.com/dump-time/games-admin-server/model"
+	"github.com/dump-time/games-admin-server/router"
+	"github.com/fvbock/endless"
 )
 
 func main() {
