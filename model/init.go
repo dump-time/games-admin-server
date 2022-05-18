@@ -6,14 +6,14 @@ import (
 )
 
 func init() {
-	if err := global.DB.AutoMigrate(
+	err := global.DB.AutoMigrate(
 		&Admin{},
 		&Team{},
 		&TeamAdmin{},
 		&Volunteer{},
 		&Job{},
-	); err != nil {
-		log.Error(err)
+	)
+	if err != nil {
+		log.Fatal(err)
 	}
 }
-

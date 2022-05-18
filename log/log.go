@@ -24,7 +24,7 @@ func Fatal(v interface{}) {
 	log.Fatalln("[\033[1;30;41mFATAL\033[0m] ", v)
 }
 
-func LogFormatter(param gin.LogFormatterParams) string {
+func Formatter(param gin.LogFormatterParams) string {
 	return fmt.Sprintf("%s |%s %d %s| %s |%s %s %s %s | %s | size: %d | %s | %s\n",
 		param.TimeStamp.Format(time.RFC1123),
 		param.StatusCodeColor(),

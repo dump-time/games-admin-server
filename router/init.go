@@ -19,7 +19,7 @@ func init() {
 	}
 
 	// Log formatter
-	R.Use(gin.LoggerWithFormatter(log.LogFormatter))
+	R.Use(gin.LoggerWithFormatter(log.Formatter))
 
 	// Panic auto recovery & return 500
 	R.Use(gin.Recovery())
@@ -27,5 +27,8 @@ func init() {
 	// Setup routers
 	v1 := R.Group("/api/v1")
 	teamAPI := v1.Group("/team/:teamID")
-	initVolunteerRouter(teamAPI)
+	{
+		initVolunteerRouter(teamAPI)
+		initJobRouter(teamAPI)
+	}
 }
