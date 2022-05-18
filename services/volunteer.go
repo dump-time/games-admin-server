@@ -6,6 +6,6 @@ import (
 )
 
 func AddVolunteer(volunteer *model.Volunteer) error {
-	result := global.DB.Create(&volunteer);	
+	result := global.DB.Create(&volunteer)
 	return result.Error
 }
