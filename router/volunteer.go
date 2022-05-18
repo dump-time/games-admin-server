@@ -6,5 +6,5 @@ import (
 )
 
 func initVolunteerRouter(apiGroup *gin.RouterGroup) {
-	apiGroup.POST("/team/:teamID/volunteer", controller.AddVolunteerController)
+	apiGroup.POST("/volunteer", controller.AddVolunteerController)
 }

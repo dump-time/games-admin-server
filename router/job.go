@@ -6,5 +6,5 @@ import (
 )
 
 func initJobRouter(apiGroup *gin.RouterGroup) {
-	apiGroup.POST("/team/:teamID/job", controller.AddJob)
+	apiGroup.POST("/job", controller.AddJob)
 }
