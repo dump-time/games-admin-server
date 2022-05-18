@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"database/sql"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -45,8 +44,15 @@ func AddVolunteerController(context *gin.Context) {
 		Name:       req.Name,
 		IDNumber:   req.IDNumber,
 		Gender:     req.Gender,
+		Intention:  req.Intention,
+		Tel:        req.Tel,
+		Experience: req.Experience,
+		Avatar:     req.Avatar,
 		Employment: req.Employment,
-		TeamID:     sql.NullInt64{Valid: false},
+	}
+
+	if teamID != -1 {
+
 	}
 
 	if err := services.AddVolunteer(&volunteerData); err != nil {
