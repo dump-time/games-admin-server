@@ -47,7 +47,7 @@ func AddJob(ctx *gin.Context) {
 	}
 
 	if err := services.AddJob(mod); err != nil {
-		util.FailedResp(ctx, 4201, err.Error())
+		util.FailedResp(ctx, 4201, "Add Job Failed")
 		return
 	}
 
@@ -64,10 +64,10 @@ func GetJobs(ctx *gin.Context) {
 
 	jobs, err := services.GetJobs(sql.NullInt64{
 		Int64: int64(teamId),
-		Valid: teamId > 0,
+		Valid: teamId >= 0,
 	})
 	if err != nil {
-		util.FailedResp(ctx, 4202, err.Error())
+		util.FailedResp(ctx, 4202, "Get Jobs Failed")
 		return
 	}
 	if len(jobs) == 0 {
