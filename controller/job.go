@@ -9,7 +9,7 @@ import (
 	"strconv"
 )
 
-type request struct {
+type addRequest struct {
 	Name     string `json:"name"`
 	Content  string `json:"content"`
 	Location string `json:"location"`
@@ -23,7 +23,7 @@ func AddJob(ctx *gin.Context) {
 		return
 	}
 
-	var req request
+	var req addRequest
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		util.ParamsErrResp(ctx)
 		return
@@ -52,4 +52,28 @@ func AddJob(ctx *gin.Context) {
 	}
 
 	util.SuccessResp(ctx, nil)
+}
+
+func GetJobs(ctx *gin.Context) {
+	param := ctx.Param("teamID")
+	teamId, err := strconv.Atoi(param)
+	if err != nil {
+		util.ParamsErrResp(ctx)
+		return
+	}
+
+	jobs, err := services.GetJobs(sql.NullInt64{
+		Int64: int64(teamId),
+		Valid: teamId > 0,
+	})
+	if err != nil {
+		util.FailedResp(ctx, 4202, err.Error())
+		return
+	}
+	if len(jobs) == 0 {
+		util.NotFoundResp(ctx)
+		return
+	}
+
+	util.SuccessResp(ctx, jobs)
 }

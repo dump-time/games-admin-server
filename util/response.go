@@ -27,3 +27,7 @@ func FailedResp(context *gin.Context, code int, msg string) {
 func ParamsErrResp(context *gin.Context) {
 	FailedResp(context, 4001, "parameter error!")
 }
+
+func NotFoundResp(context *gin.Context) {
+	FailedResp(context, 404, "Not Found")
+}
