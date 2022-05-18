@@ -19,7 +19,7 @@ func init() {
 	}
 
 	// Log formatter
-	R.Use(gin.LoggerWithFormatter(log.LogFormatter))
+	R.Use(gin.LoggerWithFormatter(log.Formatter))
 
 	// Panic auto recovery & return 500
 	R.Use(gin.Recovery())
