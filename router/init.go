@@ -26,13 +26,6 @@ func init() {
 
 	// Setup routers
 	v1 := R.Group("/api/v1")
-	{
-		v1.GET("/ping", func(c *gin.Context) {
-			c.JSON(200, gin.H{
-				"message": "pong",
-			})
-		})
-
-		initVolunteerRouter(v1)
-	}
+	teamAPI := v1.Group("/team/:teamID")
+	initVolunteerRouter(teamAPI)
 }
