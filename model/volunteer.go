@@ -15,7 +15,7 @@ type Volunteer struct {
 	Gender     bool
 	Employment string // 目前在职情况
 	Avatar     string // 头像地址
-	Intention  string // 志愿
+	Intention  int    // 志愿 JobID
 	Experience string `gorm:"type:text"` // 工作经历
 	Tel        string // 电话联系方式
 	JobID      sql.NullInt64
