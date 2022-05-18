@@ -1,11 +1,15 @@
 package model
 
-import "gorm.io/gorm"
+import (
+	"database/sql"
+
+	"gorm.io/gorm"
+)
 
 type Job struct {
 	gorm.Model
 
-	TeamID uint
+	TeamID sql.NullInt64
 	Name string
 	Content string
 	Location string
