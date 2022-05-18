@@ -25,5 +25,5 @@ func FailedResp(context *gin.Context, code int, msg string) {
 }
 
 func ParamsErrResp(context *gin.Context) {
-	FailedResp(context, 400, "parameter error!")
+	FailedResp(context, 4001, "parameter error!")
 }
