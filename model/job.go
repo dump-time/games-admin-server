@@ -5,7 +5,7 @@ import "gorm.io/gorm"
 type Job struct {
 	gorm.Model
 
-	TeamID uint
+	TeamID *uint
 	Name string
 	Content string
 	Location string
