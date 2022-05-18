@@ -2,7 +2,6 @@ package controller
 
 import (
 	"database/sql"
-	"fmt"
 	"strconv"
 
 	"github.com/dump-time/games-admin-server/log"
@@ -10,6 +9,11 @@ import (
 	"github.com/dump-time/games-admin-server/services"
 	"github.com/dump-time/games-admin-server/util"
 	"github.com/gin-gonic/gin"
+)
+
+const (
+	addVolunteerErrorCode  int = 4101
+	listVolunteerErrorCode int = 4102
 )
 
 type AddVolunteerReq struct {
@@ -59,9 +63,69 @@ func AddVolunteerController(context *gin.Context) {
 
 	if err := services.AddVolunteer(&volunteerData); err != nil {
 		log.Error(err)
-		util.FailedResp(context, 4101, fmt.Sprint(err))
+		util.FailedResp(context, addVolunteerErrorCode, "Add volunteer error")
 		return
 	}
-	
+
 	util.SuccessResp(context, nil)
+}
+
+func ListVolunteersController(context *gin.Context) {
+	// Extract data from request
+	teamIDRaw := context.Param("teamID")
+	teamID, err := strconv.Atoi(teamIDRaw)
+	if err != nil {
+		log.Error(err)
+		util.ParamsErrResp(context)
+		return
+	}
+	offsetRaw := context.DefaultQuery("offset", "0")
+	pageSizeRaw := context.DefaultQuery("page-size", "10")
+	offset, err := strconv.Atoi(offsetRaw)
+	if err != nil {
+		log.Error(err)
+		util.ParamsErrResp(context)
+		return
+	}
+	pageSize, err := strconv.Atoi(pageSizeRaw)
+	if err != nil {
+		log.Error(err)
+		util.ParamsErrResp(context)
+		return
+	}
+	var nullableTeamID sql.NullInt64
+	if teamID == -1 {
+		nullableTeamID = sql.NullInt64{Valid: false}
+	} else {
+		nullableTeamID = sql.NullInt64{
+			Int64: int64(teamID),
+			Valid: true,
+		}
+	}
+
+	// Get volunteers in databases
+	volunteers, err := services.ListVolunteers(nullableTeamID, offset, pageSize)
+	if err != nil {
+		log.Error(err)
+		util.FailedResp(context, listVolunteerErrorCode, "List volunteer error")
+		return
+	}
+
+	var volunteerResp []gin.H
+	for _, volunteer := range volunteers {
+		volunteerResp = append(volunteerResp, gin.H{
+			"id":         volunteer.ID,
+			"name":       volunteer.Name,
+			"gender":     volunteer.Gender,
+			"intention":  volunteer.Intention,
+			"job":        volunteer.JobID.Int64,
+			"tel":        volunteer.Tel,
+			"experience": volunteer.Experience,
+			"team_id":    volunteer.TeamID.Int64,
+			"avatar":     volunteer.Avatar,
+			"id_number":  volunteer.IDNumber,
+		})
+	}
+
+	util.SuccessResp(context, volunteerResp)
 }

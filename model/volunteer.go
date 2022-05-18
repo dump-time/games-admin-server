@@ -9,7 +9,7 @@ import (
 type Volunteer struct {
 	gorm.Model
 
-	TeamID     sql.NullInt64
+	TeamID     sql.NullInt64 `gorm:"index"`
 	Name       string
 	IDNumber   string // 身份证号
 	Gender     bool
