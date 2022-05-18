@@ -1,11 +1,15 @@
 package model
 
-import "gorm.io/gorm"
+import (
+	"database/sql"
+
+	"gorm.io/gorm"
+)
 
 type Volunteer struct {
 	gorm.Model
 
-	TeamID     *uint
+	TeamID     sql.NullInt64
 	Name       string
 	IDNumber   string // 身份证号
 	Gender     bool
@@ -14,5 +18,5 @@ type Volunteer struct {
 	Intention  string // 志愿
 	Experience string `gorm:"type:text"` // 工作经历
 	Tel        string // 电话联系方式
-	JobID      *uint
+	JobID      sql.NullInt64
 }
