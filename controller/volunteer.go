@@ -1,8 +1,8 @@
 package controller
 
 import (
+	"database/sql"
 	"fmt"
-	"net/http"
 	"strconv"
 
 	"github.com/dump-time/games-admin-server/log"
@@ -51,8 +51,10 @@ func AddVolunteerController(context *gin.Context) {
 		Employment: req.Employment,
 	}
 
-	if teamID != -1 {
-
+	if teamID == -1 {
+		volunteerData.TeamID = sql.NullInt64{Valid: false}
+	} else {
+		volunteerData.TeamID = sql.NullInt64{Int64: int64(teamID), Valid: true}
 	}
 
 	if err := services.AddVolunteer(&volunteerData); err != nil {
@@ -60,8 +62,6 @@ func AddVolunteerController(context *gin.Context) {
 		util.FailedResp(context, 4101, fmt.Sprint(err))
 		return
 	}
-
-	context.JSON(http.StatusOK, gin.H{
-		"hello": teamID,
-	})
+	
+	util.SuccessResp(context, nil)
 }
