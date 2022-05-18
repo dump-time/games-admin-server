@@ -33,6 +33,6 @@ func init() {
 			})
 		})
 
-		// TODO: routers...
+		initVolunteerRouter(v1)
 	}
 }
