@@ -34,5 +34,6 @@ func init() {
 		})
 
 		initVolunteerRouter(v1)
+		initJobRouter(v1)
 	}
 }
