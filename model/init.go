@@ -7,7 +7,6 @@ import (
 
 func init() {
 	err := global.DB.AutoMigrate(
-		&Admin{},
 		&Team{},
 		&TeamAdmin{},
 		&Volunteer{},
