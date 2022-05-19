@@ -8,4 +8,5 @@ import (
 func initJobRouter(apiGroup *gin.RouterGroup) {
 	apiGroup.POST("/job", controller.AddJob)
 	apiGroup.GET("/jobs", controller.GetJobs)
+	apiGroup.DELETE("/job/:id", controller.DeleteJob)
 }
