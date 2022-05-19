@@ -28,6 +28,7 @@ func init() {
 	v1 := R.Group("/api/v1")
 	teamAPI := v1.Group("/team/:teamID")
 	{
+		// TODO Add middle ware to check admin privilege
 		initVolunteerRouter(teamAPI)
 		initJobRouter(teamAPI)
 	}

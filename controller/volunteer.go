@@ -14,6 +14,7 @@ import (
 const (
 	addVolunteerErrorCode  int = 4101
 	listVolunteerErrorCode int = 4102
+	delVolunteerErrorCode  int = 4103
 )
 
 type AddVolunteerReq struct {
@@ -128,4 +129,38 @@ func ListVolunteersController(context *gin.Context) {
 	}
 
 	util.SuccessResp(context, volunteerResp)
+}
+
+func DeleteVolunteerController(context *gin.Context) {
+	teamIDRaw := context.Param("teamID")
+	volunteerIDRaw := context.Param("id")
+
+	teamID, err := strconv.Atoi(teamIDRaw)
+	if err != nil {
+		log.Error(err)
+		util.ParamsErrResp(context)
+		return
+	}
+	volunteerID, err := strconv.Atoi(volunteerIDRaw)
+	if err != nil {
+		log.Error(err)
+		util.ParamsErrResp(context)
+		return
+	}
+
+	var nullableTeamID sql.NullInt64
+	if teamID == -1 {
+		nullableTeamID.Valid = false
+	} else {
+		nullableTeamID.Int64 = int64(teamID)
+		nullableTeamID.Valid = true
+	}
+
+	if err := services.DeleteVolunteer(nullableTeamID, uint(volunteerID)); err != nil {
+		log.Error(err)
+		util.FailedResp(context, delVolunteerErrorCode, "DeleteVolunteer error")
+		return
+	}
+
+	util.SuccessResp(context, nil)
 }

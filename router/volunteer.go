@@ -10,6 +10,7 @@ func initVolunteerRouter(apiGroup *gin.RouterGroup) *gin.RouterGroup {
 
 	volunteerRouter := apiGroup.Group("/volunteer")
 	volunteerRouter.POST("/", controller.AddVolunteerController)
+	volunteerRouter.DELETE("/:id", controller.DeleteVolunteerController)
 
 	return volunteerRouter
 }
