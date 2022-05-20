@@ -16,6 +16,7 @@ const (
 	listVolunteerErrorCode   int = 4102
 	delVolunteerErrorCode    int = 4103
 	updateVolunteerErrorCode int = 4104
+	searchVolunteerErrorCode int = 4105
 )
 
 type AddVolunteerReq struct {
@@ -229,4 +230,49 @@ func UpdateVolunteerController(context *gin.Context) {
 	}
 
 	util.SuccessResp(context, nil)
+}
+
+func SearchVolunteerController(context *gin.Context) {
+	// Extract data from request
+	teamIDRaw := context.Param("teamID")
+	IDNumber := context.Param("IDNumber")
+	teamID, err := strconv.Atoi(teamIDRaw)
+	if err != nil {
+		log.Error(err)
+		util.ParamsErrResp(context)
+		return
+	}
+	var nullableTeamID sql.NullInt64
+	if teamID == -1 {
+		nullableTeamID.Valid = false
+	} else {
+		nullableTeamID.Int64 = int64(teamID)
+		nullableTeamID.Valid = true
+	}
+
+	volunteer, error := services.SearchVolunteer(nullableTeamID, IDNumber)
+	if error != nil {
+		log.Error(err)
+		util.FailedResp(context, searchVolunteerErrorCode, "Update volunteer error")
+		return
+	}
+
+	resp := gin.H{
+		"id":         volunteer.ID,
+		"name":       volunteer.Name,
+		"gender":     volunteer.Gender,
+		"intention":  volunteer.Intention,
+		"tel":        volunteer.Tel,
+		"experience": volunteer.Experience,
+		"avatar":     volunteer.Avatar,
+		"id_number":  volunteer.IDNumber,
+		"employment": volunteer.Employment,
+		"status":     volunteer.Status,
+	}
+	if volunteer.TeamID.Valid {
+		resp["team_id"] = volunteer.TeamID.Int64
+	} else {
+		resp["team_id"] = nil
+	}
+	util.SuccessResp(context, resp)
 }
