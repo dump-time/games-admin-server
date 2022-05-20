@@ -56,3 +56,18 @@ func UpdateVolunteer(teamID sql.NullInt64, volunteerID uint, volunteer *model.Vo
 	}
 	return nil
 }
+
+func SearchVolunteer(teamID sql.NullInt64, IDNumber string) (model.Volunteer, error) {
+	var volunteer model.Volunteer
+	result := global.DB.Where(map[string]interface{}{
+		"team_id":   teamID,
+		"id_number": IDNumber,
+	}).Take(&volunteer)
+	if result.Error != nil {
+		return volunteer, result.Error
+	} else if result.RowsAffected == 0 {
+		return volunteer, errors.New("No such a volunteer")
+	} else {
+		return volunteer, nil
+	}
+}
