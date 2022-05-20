@@ -5,6 +5,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func initVolunteerRouter(apiGroup *gin.RouterGroup) {
-	apiGroup.POST("/volunteer", controller.AddVolunteerController)
+func initVolunteerRouter(apiGroup *gin.RouterGroup) *gin.RouterGroup {
+	apiGroup.GET("/volunteers", controller.ListVolunteersController)
+
+	volunteerRouter := apiGroup.Group("/volunteer")
+	volunteerRouter.POST("/", controller.AddVolunteerController)
+	volunteerRouter.DELETE("/:id", controller.DeleteVolunteerController)
+	volunteerRouter.PATCH("/:id", controller.UpdateVolunteerController)
+
+	return volunteerRouter
 }

@@ -1,7 +1,11 @@
 package model
 
-type TeamAdmin struct {
-	Admin
+import "gorm.io/gorm"
 
+type TeamAdmin struct {
+	gorm.Model
+
+	username string
+	password string
 	TeamID uint
 }
