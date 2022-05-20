@@ -19,4 +19,5 @@ type Volunteer struct {
 	Experience string `gorm:"type:text"` // 工作经历
 	Tel        string // 电话联系方式
 	JobID      sql.NullInt64
+	Status     int // 志愿者录取状态
 }
