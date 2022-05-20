@@ -46,6 +46,7 @@ func UpdateVolunteer(teamID sql.NullInt64, volunteerID uint, volunteer *model.Vo
 		"id_number":  volunteer.IDNumber,
 		"employment": volunteer.Employment,
 		"team_id":    volunteer.TeamID,
+		"status":     volunteer.Status,
 	})
 	if result.Error != nil {
 		return result.Error

@@ -27,6 +27,7 @@ type AddVolunteerReq struct {
 	Avatar     string `json:"avatar"`
 	IDNumber   string `json:"id_number"`
 	Employment string `json:"employment"`
+	Status     int    `json:"status"`
 }
 
 type UpdateVolunteerReq struct {
@@ -61,6 +62,7 @@ func AddVolunteerController(context *gin.Context) {
 		Experience: req.Experience,
 		Avatar:     req.Avatar,
 		Employment: req.Employment,
+		Status:     req.Status,
 	}
 
 	if teamID == -1 {
@@ -132,6 +134,7 @@ func ListVolunteersController(context *gin.Context) {
 			"team_id":    volunteer.TeamID.Int64,
 			"avatar":     volunteer.Avatar,
 			"id_number":  volunteer.IDNumber,
+			"status":     volunteer.Status,
 		})
 	}
 
@@ -211,6 +214,7 @@ func UpdateVolunteerController(context *gin.Context) {
 		Avatar:     req.Avatar,
 		IDNumber:   req.IDNumber,
 		Employment: req.Employment,
+		Status:     req.Status,
 	}
 	if req.TeamIDNew == -1 {
 		volunteer.TeamID.Valid = false
