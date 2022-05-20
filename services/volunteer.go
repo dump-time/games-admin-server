@@ -31,3 +31,27 @@ func DeleteVolunteer(teamID sql.NullInt64, volunteerID uint) error {
 	}
 	return result.Error
 }
+
+func UpdateVolunteer(teamID sql.NullInt64, volunteerID uint, volunteer *model.Volunteer) error {
+	result := global.DB.Model(&model.Volunteer{}).Where(map[string]interface{}{
+		"id":      volunteerID,
+		"team_id": teamID,
+	}).Updates(map[string]interface{}{
+		"name":       volunteer.Name,
+		"gender":     volunteer.Gender,
+		"intention":  volunteer.Intention,
+		"tel":        volunteer.Tel,
+		"experience": volunteer.Experience,
+		"avatar":     volunteer.Avatar,
+		"id_number":  volunteer.IDNumber,
+		"employment": volunteer.Employment,
+		"team_id":    volunteer.TeamID,
+	})
+	if result.Error != nil {
+		return result.Error
+	}
+	if result.RowsAffected == 0 {
+		return errors.New("No such a volunteer in this team")
+	}
+	return nil
+}

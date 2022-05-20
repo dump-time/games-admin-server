@@ -12,9 +12,10 @@ import (
 )
 
 const (
-	addVolunteerErrorCode  int = 4101
-	listVolunteerErrorCode int = 4102
-	delVolunteerErrorCode  int = 4103
+	addVolunteerErrorCode    int = 4101
+	listVolunteerErrorCode   int = 4102
+	delVolunteerErrorCode    int = 4103
+	updateVolunteerErrorCode int = 4104
 )
 
 type AddVolunteerReq struct {
@@ -26,6 +27,12 @@ type AddVolunteerReq struct {
 	Avatar     string `json:"avatar"`
 	IDNumber   string `json:"id_number"`
 	Employment string `json:"employment"`
+}
+
+type UpdateVolunteerReq struct {
+	AddVolunteerReq
+
+	TeamIDNew int `json:"team_id"`
 }
 
 func AddVolunteerController(context *gin.Context) {
@@ -159,6 +166,61 @@ func DeleteVolunteerController(context *gin.Context) {
 	if err := services.DeleteVolunteer(nullableTeamID, uint(volunteerID)); err != nil {
 		log.Error(err)
 		util.FailedResp(context, delVolunteerErrorCode, "DeleteVolunteer error")
+		return
+	}
+
+	util.SuccessResp(context, nil)
+}
+
+func UpdateVolunteerController(context *gin.Context) {
+	// Extract data from request
+	teamIDRaw := context.Param("teamID")
+	volunteerIDRaw := context.Param("id")
+	teamID, err := strconv.Atoi(teamIDRaw)
+	if err != nil {
+		log.Error(err)
+		util.ParamsErrResp(context)
+		return
+	}
+	volunteerID, err := strconv.Atoi(volunteerIDRaw)
+	if err != nil {
+		log.Error(err)
+		util.ParamsErrResp(context)
+		return
+	}
+	var nullableTeamID sql.NullInt64
+	if teamID == -1 {
+		nullableTeamID.Valid = false
+	} else {
+		nullableTeamID.Int64 = int64(teamID)
+		nullableTeamID.Valid = true
+	}
+	var req UpdateVolunteerReq
+	if err := context.ShouldBindJSON(&req); err != nil {
+		log.Error(err)
+		util.ParamsErrResp(context)
+		return
+	}
+
+	volunteer := model.Volunteer{
+		Name:       req.Name,
+		Gender:     req.Gender,
+		Intention:  req.Intention,
+		Tel:        req.Tel,
+		Experience: req.Experience,
+		Avatar:     req.Avatar,
+		IDNumber:   req.IDNumber,
+		Employment: req.Employment,
+	}
+	if req.TeamIDNew == -1 {
+		volunteer.TeamID.Valid = false
+	} else {
+		volunteer.TeamID.Int64 = int64(req.TeamIDNew)
+		volunteer.TeamID.Valid = true
+	}
+	if err := services.UpdateVolunteer(nullableTeamID, uint(volunteerID), &volunteer); err != nil {
+		log.Error(err)
+		util.FailedResp(context, updateVolunteerErrorCode, "Update volunteer error")
 		return
 	}
 
