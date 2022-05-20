@@ -1,8 +1,13 @@
 package router
 
 import (
+	"os"
+
 	"github.com/dump-time/games-admin-server/global"
 	"github.com/dump-time/games-admin-server/log"
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/redis"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -24,8 +29,22 @@ func init() {
 	// Panic auto recovery & return 500
 	R.Use(gin.Recovery())
 
+	// Add session middleware
+	redisHost := global.Config.Redis.Hostname
+	redisPort := global.Config.Redis.Port
+	redisPass := global.Config.Redis.Password
+	redisSecret := global.Config.Redis.Secret
+	store, err := redis.NewStore(10, "tcp", redisHost+":"+redisPort, redisPass, []byte(redisSecret))
+	if err != nil {
+		log.Fatal("Loading redis error")
+		log.Fatal(err)
+		os.Exit(-1)
+	}
+	R.Use(sessions.Sessions("admin-server-session", store))
+
 	// Setup routers
 	v1 := R.Group("/api/v1")
+	initBasicRouter(v1)
 	teamAPI := v1.Group("/team/:teamID")
 	{
 		// TODO Add middle ware to check admin privilege

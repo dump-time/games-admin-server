@@ -18,6 +18,12 @@ type configType struct {
 		Password string `yaml:"pass"`
 		DBName   string `yaml:"name"`
 	}
+	Redis struct {
+		Hostname string `yaml:"host"`
+		Password string `yaml:"pass"`
+		Port     string `yaml:"port"`
+		Secret   string `yaml:"secret"`
+	}
 }
 
 var Config configType

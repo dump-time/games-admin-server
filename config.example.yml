@@ -1,9 +1,14 @@
 serv:
   addr: "localhost:8083"
-  proxies: [ "127.0.0.1", "::1" ]
+  proxies: ["127.0.0.1", "::1"]
 db:
-  host: 'localhost'
-  port: '3306'
-  user: 'root'
-  pass: 'root'
-  name: 'admin_sys'
+  host: "localhost"
+  port: "3306"
+  user: "root"
+  pass: "root"
+  name: "admin_sys"
+redis:
+  host: "localhost"
+  pass: ""
+  port: "6379"
+  secret: "reoreo"

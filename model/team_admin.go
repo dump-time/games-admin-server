@@ -1,11 +1,15 @@
 package model
 
-import "gorm.io/gorm"
+import (
+	"database/sql"
+
+	"gorm.io/gorm"
+)
 
 type TeamAdmin struct {
 	gorm.Model
 
-	username string
-	password string
-	TeamID uint
+	Username string
+	Password string
+	TeamID   sql.NullInt64
 }
