@@ -150,6 +150,7 @@ func ListVolunteersController(context *gin.Context) {
 			"avatar":     volunteer.Avatar,
 			"id_number":  volunteer.IDNumber,
 			"status":     volunteer.Status,
+			"employment": volunteer.Employment,
 		})
 	}
 
