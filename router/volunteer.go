@@ -7,7 +7,6 @@ import (
 
 func initVolunteerRouter(apiGroup *gin.RouterGroup) *gin.RouterGroup {
 	apiGroup.GET("/volunteers", controller.ListVolunteersController)
-	apiGroup.GET("/volunteers-page-num")
 
 	volunteerRouter := apiGroup.Group("/volunteer")
 	{
