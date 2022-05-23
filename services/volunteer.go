@@ -16,6 +16,8 @@ func AddVolunteer(volunteer *model.Volunteer) error {
 func ListVolunteers(teamID sql.NullInt64, offset int, pageSize int) ([]model.Volunteer, error) {
 	var volunteers []model.Volunteer
 	result := global.DB.Where(map[string]interface{}{"team_id": teamID}).
+		Preload("Intention").
+		Preload("Job").
 		Limit(pageSize).Offset(offset).
 		Find(&volunteers)
 	return volunteers, result.Error
@@ -27,7 +29,7 @@ func DeleteVolunteer(teamID sql.NullInt64, volunteerID uint) error {
 		"team_id": teamID,
 	}).Delete(&model.Volunteer{})
 	if result.RowsAffected == 0 {
-		return errors.New("No such a volunteer in this team")
+		return errors.New("no such a volunteer in this team")
 	}
 	return result.Error
 }
@@ -52,7 +54,7 @@ func UpdateVolunteer(teamID sql.NullInt64, volunteerID uint, volunteer *model.Vo
 		return result.Error
 	}
 	if result.RowsAffected == 0 {
-		return errors.New("No such a volunteer in this team")
+		return errors.New("no such a volunteer in this team")
 	}
 	return nil
 }
@@ -66,7 +68,7 @@ func SearchVolunteer(teamID sql.NullInt64, IDNumber string) (model.Volunteer, er
 	if result.Error != nil {
 		return volunteer, result.Error
 	} else if result.RowsAffected == 0 {
-		return volunteer, errors.New("No such a volunteer")
+		return volunteer, errors.New("no such a volunteer")
 	} else {
 		return volunteer, nil
 	}
