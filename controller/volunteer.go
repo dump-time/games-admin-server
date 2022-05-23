@@ -55,15 +55,21 @@ func AddVolunteerController(context *gin.Context) {
 
 	// Extract data from request body
 	volunteerData := model.Volunteer{
-		Name:       req.Name,
-		IDNumber:   req.IDNumber,
-		Gender:     req.Gender,
-		Intention:  req.Intention,
+		Name:     req.Name,
+		IDNumber: req.IDNumber,
+		Gender:   req.Gender,
+		// IntentionID: req.Intention,
 		Tel:        req.Tel,
 		Experience: req.Experience,
 		Avatar:     req.Avatar,
 		Employment: req.Employment,
 		Status:     req.Status,
+	}
+	if req.Intention == -1 {
+		volunteerData.IntentionID.Valid = false
+	} else {
+		volunteerData.IntentionID.Valid = true
+		volunteerData.IntentionID.Int64 = int64(req.Intention)
 	}
 
 	if teamID == -1 {
@@ -136,7 +142,7 @@ func ListVolunteersController(context *gin.Context) {
 			"id":         volunteer.ID,
 			"name":       volunteer.Name,
 			"gender":     volunteer.Gender,
-			"intention":  volunteer.Intention,
+			"intention":  volunteer.IntentionID,
 			"job":        volunteer.JobID.Int64,
 			"tel":        volunteer.Tel,
 			"experience": volunteer.Experience,
@@ -220,7 +226,6 @@ func UpdateVolunteerController(context *gin.Context) {
 	volunteer := model.Volunteer{
 		Name:       req.Name,
 		Gender:     req.Gender,
-		Intention:  req.Intention,
 		Tel:        req.Tel,
 		Experience: req.Experience,
 		Avatar:     req.Avatar,
@@ -234,6 +239,13 @@ func UpdateVolunteerController(context *gin.Context) {
 		volunteer.TeamID.Int64 = int64(req.TeamIDNew)
 		volunteer.TeamID.Valid = true
 	}
+	if req.Intention == -1 {
+		volunteer.IntentionID.Valid = false
+	} else {
+		volunteer.TeamID.Int64 = int64(req.Intention)
+		volunteer.TeamID.Valid = true
+	}
+
 	if err := services.UpdateVolunteer(nullableTeamID, uint(volunteerID), &volunteer); err != nil {
 		log.Error(err)
 		util.FailedResp(context, updateVolunteerErrorCode, "Update volunteer error")
@@ -272,7 +284,7 @@ func SearchVolunteerController(context *gin.Context) {
 		"id":         volunteer.ID,
 		"name":       volunteer.Name,
 		"gender":     volunteer.Gender,
-		"intention":  volunteer.Intention,
+		"intention":  volunteer.IntentionID,
 		"tel":        volunteer.Tel,
 		"experience": volunteer.Experience,
 		"avatar":     volunteer.Avatar,
