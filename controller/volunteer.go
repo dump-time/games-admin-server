@@ -138,7 +138,7 @@ func ListVolunteersController(context *gin.Context) {
 
 	var volunteerList []gin.H
 	for _, volunteer := range volunteers {
-		volunteerList = append(volunteerList, gin.H{
+		volunteerData := gin.H{
 			"id":         volunteer.ID,
 			"name":       volunteer.Name,
 			"gender":     volunteer.Gender,
@@ -146,12 +146,17 @@ func ListVolunteersController(context *gin.Context) {
 			"job":        volunteer.Job.Name,
 			"tel":        volunteer.Tel,
 			"experience": volunteer.Experience,
-			"team_id":    volunteer.TeamID.Int64,
 			"avatar":     volunteer.Avatar,
 			"id_number":  volunteer.IDNumber,
 			"status":     volunteer.Status,
 			"employment": volunteer.Employment,
-		})
+		}
+		if volunteer.TeamID.Valid {
+			volunteerData["team_id"] = volunteer.TeamID.Int64
+		} else {
+			volunteerData["team_id"] = nil
+		}
+		volunteerList = append(volunteerList, volunteerData)
 	}
 
 	util.SuccessResp(context, gin.H{
