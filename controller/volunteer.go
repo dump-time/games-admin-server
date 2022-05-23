@@ -123,7 +123,7 @@ func ListVolunteersController(context *gin.Context) {
 	}
 
 	// Get volunteer pages
-	pagesNum, err := services.GetVolunteerPagesNum(nullableTeamID, pageSize)
+	pagesNum, err := services.GetVolunteersNum(nullableTeamID, pageSize)
 	if err != nil {
 		log.Error(err)
 		util.FailedResp(context, listVolunteerErrorCode, "List volunteer error")
