@@ -41,7 +41,7 @@ func UpdateVolunteer(teamID sql.NullInt64, volunteerID uint, volunteer *model.Vo
 	}).Updates(map[string]interface{}{
 		"name":       volunteer.Name,
 		"gender":     volunteer.Gender,
-		"intention_id":  volunteer.IntentionID,
+		"job_id":     volunteer.JobID,
 		"tel":        volunteer.Tel,
 		"experience": volunteer.Experience,
 		"avatar":     volunteer.Avatar,

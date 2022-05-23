@@ -22,7 +22,7 @@ const (
 type AddVolunteerReq struct {
 	Name       string `json:"name"`
 	Gender     bool   `json:"gender"`
-	Intention  int    `json:"intention"`
+	Job        int    `json:"job_id"`
 	Tel        string `json:"tel"`
 	Experience string `json:"experience"`
 	Avatar     string `json:"avatar"`
@@ -55,21 +55,20 @@ func AddVolunteerController(context *gin.Context) {
 
 	// Extract data from request body
 	volunteerData := model.Volunteer{
-		Name:     req.Name,
-		IDNumber: req.IDNumber,
-		Gender:   req.Gender,
-		// IntentionID: req.Intention,
+		Name:       req.Name,
+		IDNumber:   req.IDNumber,
+		Gender:     req.Gender,
 		Tel:        req.Tel,
 		Experience: req.Experience,
 		Avatar:     req.Avatar,
 		Employment: req.Employment,
 		Status:     req.Status,
 	}
-	if req.Intention == -1 {
-		volunteerData.IntentionID.Valid = false
+	if req.Job == -1 {
+		volunteerData.JobID.Valid = false
 	} else {
-		volunteerData.IntentionID.Valid = true
-		volunteerData.IntentionID.Int64 = int64(req.Intention)
+		volunteerData.JobID.Valid = true
+		volunteerData.JobID.Int64 = int64(req.Job)
 	}
 
 	if teamID == -1 {
@@ -245,11 +244,11 @@ func UpdateVolunteerController(context *gin.Context) {
 		volunteer.TeamID.Int64 = int64(req.TeamIDNew)
 		volunteer.TeamID.Valid = true
 	}
-	if req.Intention == -1 {
-		volunteer.IntentionID.Valid = false
+	if req.Job == -1 {
+		volunteer.JobID.Valid = false
 	} else {
-		volunteer.TeamID.Int64 = int64(req.Intention)
-		volunteer.TeamID.Valid = true
+		volunteer.JobID.Int64 = int64(req.Job)
+		volunteer.JobID.Valid = true
 	}
 
 	if err := services.UpdateVolunteer(nullableTeamID, uint(volunteerID), &volunteer); err != nil {
@@ -290,7 +289,8 @@ func SearchVolunteerController(context *gin.Context) {
 		"id":         volunteer.ID,
 		"name":       volunteer.Name,
 		"gender":     volunteer.Gender,
-		"intention":  volunteer.IntentionID,
+		"intention":  volunteer.Intention.Name,
+		"job":        volunteer.Job.Name,
 		"tel":        volunteer.Tel,
 		"experience": volunteer.Experience,
 		"avatar":     volunteer.Avatar,
