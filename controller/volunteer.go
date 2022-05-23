@@ -122,9 +122,17 @@ func ListVolunteersController(context *gin.Context) {
 		return
 	}
 
-	var volunteerResp []gin.H
+	// Get volunteer pages
+	pagesNum, err := services.GetVolunteerPagesNum(nullableTeamID, pageSize)
+	if err != nil {
+		log.Error(err)
+		util.FailedResp(context, listVolunteerErrorCode, "List volunteer error")
+		return
+	}
+
+	var volunteerList []gin.H
 	for _, volunteer := range volunteers {
-		volunteerResp = append(volunteerResp, gin.H{
+		volunteerList = append(volunteerList, gin.H{
 			"id":         volunteer.ID,
 			"name":       volunteer.Name,
 			"gender":     volunteer.Gender,
@@ -139,7 +147,10 @@ func ListVolunteersController(context *gin.Context) {
 		})
 	}
 
-	util.SuccessResp(context, volunteerResp)
+	util.SuccessResp(context, gin.H{
+		"num":        pagesNum,
+		"volunteers": volunteerList,
+	})
 }
 
 func DeleteVolunteerController(context *gin.Context) {

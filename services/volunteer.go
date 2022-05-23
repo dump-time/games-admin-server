@@ -71,3 +71,12 @@ func SearchVolunteer(teamID sql.NullInt64, IDNumber string) (model.Volunteer, er
 		return volunteer, nil
 	}
 }
+
+func GetVolunteerPagesNum(teamID sql.NullInt64, pageSize int) (int64, error) {
+	var volunteerNum int64
+	global.DB.Model(&model.Volunteer{}).Where(map[string]interface{}{
+		"team_id": teamID,
+	}).Count(&volunteerNum)
+
+	return (volunteerNum-1)/int64(pageSize) + 1, nil
+}
