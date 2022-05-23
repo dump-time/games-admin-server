@@ -16,7 +16,7 @@ func standardResp(context *gin.Context, code int, msg string, data interface{}) 
 
 // SuccessResp the successful response
 func SuccessResp(context *gin.Context, data interface{}) {
-	standardResp(context, 200, "ok", data)
+	standardResp(context, 0, "ok", data)
 }
 
 // FailedResp the failed response
