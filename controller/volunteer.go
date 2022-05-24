@@ -132,13 +132,20 @@ func ListVolunteersController(context *gin.Context) {
 			"name":       volunteer.Name,
 			"gender":     volunteer.Gender,
 			"intention":  volunteer.Intention.Name,
-			"job":        volunteer.Job.Name,
 			"tel":        volunteer.Tel,
 			"experience": volunteer.Experience,
 			"avatar":     volunteer.Avatar,
 			"id_number":  volunteer.IDNumber,
 			"status":     volunteer.Status,
 			"employment": volunteer.Employment,
+		}
+		if volunteer.JobID.Valid {
+			volunteerData["job"] = gin.H{
+				"id":   volunteer.Job.ID,
+				"name": volunteer.Job.Name,
+			}
+		} else {
+			volunteerData["job"] = nil
 		}
 		if volunteer.TeamID.Valid {
 			volunteerData["team_id"] = volunteer.TeamID.Int64
@@ -265,13 +272,20 @@ func SearchVolunteerController(context *gin.Context) {
 		"name":       volunteer.Name,
 		"gender":     volunteer.Gender,
 		"intention":  volunteer.Intention.Name,
-		"job":        volunteer.Job.Name,
 		"tel":        volunteer.Tel,
 		"experience": volunteer.Experience,
 		"avatar":     volunteer.Avatar,
 		"id_number":  volunteer.IDNumber,
 		"employment": volunteer.Employment,
 		"status":     volunteer.Status,
+	}
+	if volunteer.JobID.Valid {
+		resp["job"] = gin.H{
+			"id":   volunteer.Job.ID,
+			"name": volunteer.Job.Name,
+		}
+	} else {
+		resp["job"] = nil
 	}
 	if volunteer.TeamID.Valid {
 		resp["team_id"] = volunteer.TeamID.Int64
