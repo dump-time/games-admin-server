@@ -64,7 +64,7 @@ func SearchVolunteer(teamID sql.NullInt64, IDNumber string) (model.Volunteer, er
 	result := global.DB.Where(map[string]interface{}{
 		"team_id":   teamID,
 		"id_number": IDNumber,
-	}).Take(&volunteer)
+	}).Preload("Intention").Preload("Job").Take(&volunteer)
 	if result.Error != nil {
 		return volunteer, result.Error
 	} else if result.RowsAffected == 0 {
