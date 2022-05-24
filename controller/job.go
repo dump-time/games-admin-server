@@ -74,10 +74,25 @@ func GetJobs(ctx *gin.Context) {
 		return
 	}
 
+	offsetRaw := ctx.DefaultQuery("offset", "0")
+	pageSizeRaw := ctx.DefaultQuery("page-size", "10")
+	offset, err := strconv.Atoi(offsetRaw)
+	if err != nil {
+		_ = ctx.Error(err)
+		util.ParamsErrResp(ctx)
+		return
+	}
+	pageSize, err := strconv.Atoi(pageSizeRaw)
+	if err != nil {
+		_ = ctx.Error(err)
+		util.ParamsErrResp(ctx)
+		return
+	}
+
 	jobs, err := services.GetJobs(sql.NullInt64{
 		Int64: teamId,
 		Valid: teamId >= 0,
-	})
+	}, offset, pageSize)
 	if err != nil {
 		_ = ctx.Error(err)
 		util.FailedResp(ctx, 4202, "Get Jobs Failed")
@@ -125,6 +140,50 @@ func DeleteJob(ctx *gin.Context) {
 		return
 	}
 	if rows == 0 {
+		util.NotFoundResp(ctx)
+		return
+	}
+
+	util.SuccessResp(ctx, nil)
+}
+
+func UpdateJob(ctx *gin.Context) {
+	teamId, err := getTeamID(ctx)
+	if err != nil {
+		_ = ctx.Error(err)
+		util.ParamsErrResp(ctx)
+		return
+	}
+
+	id, err := getID(ctx)
+	if err != nil {
+		_ = ctx.Error(err)
+		util.ParamsErrResp(ctx)
+		return
+	}
+
+	var req addRequest
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		_ = ctx.Error(err)
+		util.ParamsErrResp(ctx)
+		return
+	}
+
+	mod := &model.Job{
+		Name:     req.Name,
+		Content:  req.Content,
+		Location: req.Location,
+	}
+
+	rows, err := services.UpdateJob(
+		id,
+		sql.NullInt64{Int64: teamId, Valid: teamId >= 0},
+		mod)
+	if err != nil {
+		_ = ctx.Error(err)
+		util.ParamsErrResp(ctx)
+		return
+	} else if rows == 0 {
 		util.NotFoundResp(ctx)
 		return
 	}

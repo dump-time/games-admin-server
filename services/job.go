@@ -21,14 +21,15 @@ type Jobs []struct {
 	Location  string    `json:"location"`
 }
 
-func GetJobs(teamId sql.NullInt64) (Jobs, error) {
+func GetJobs(teamId sql.NullInt64, offset int, pageSize int) (Jobs, error) {
 	var results Jobs
-	err := global.DB.Model(model.Job{}).
+	err := global.DB.Limit(pageSize).Offset(offset).Model(model.Job{}).
 		Find(
 			&results,
 			model.Job{
 				TeamID: teamId,
-			}).Error
+			}).
+		Error
 
 	return results, err
 }
@@ -41,5 +42,16 @@ func DeleteJob(teamId sql.NullInt64, id uint) (int64, error) {
 			},
 			TeamID: teamId,
 		})
+	return result.RowsAffected, result.Error
+}
+
+func UpdateJob(id uint, teamID sql.NullInt64, job *model.Job) (int64, error) {
+	result := global.DB.Model(model.Job{
+		Model: gorm.Model{
+			ID: id,
+		},
+		TeamID: teamID,
+	}).
+		Updates(job)
 	return result.RowsAffected, result.Error
 }
