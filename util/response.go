@@ -7,7 +7,7 @@ import (
 )
 
 func standardResp(context *gin.Context, code int, msg string, data interface{}) {
-	context.JSON(http.StatusOK, gin.H{
+	context.AbortWithStatusJSON(http.StatusOK, gin.H{
 		"code": code,
 		"msg":  msg,
 		"data": data,
@@ -26,6 +26,15 @@ func FailedResp(context *gin.Context, code int, msg string) {
 
 func ParamsErrResp(context *gin.Context) {
 	FailedResp(context, 4001, "parameter error!")
+}
+
+func NotAllowedResp(context *gin.Context) {
+	FailedResp(context, 4002, "not allow!")
+}
+
+
+func NotLoginResp(context *gin.Context) {
+	FailedResp(context, 4003, "not login!")
 }
 
 func NotFoundResp(context *gin.Context) {

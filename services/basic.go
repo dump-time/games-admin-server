@@ -12,26 +12,31 @@ import (
 func CheckAuth(context *gin.Context, username string, password string) error {
 	session := util.ContextSession(context)
 	// Extract data from session
-	sessionPass := session.Get(username)
+	sessionPass := session.Get("pass")
 	if sessionPass != nil {
 		if sessionPass != password {
-			return errors.New("Password error with username: " + username)
+			return errors.New("password error with username: " + username)
 		} else {
 			return nil
 		}
 	}
-
-	var teamAdmin model.TeamAdmin
+var teamAdmin model.TeamAdmin
 	result := global.DB.Where(map[string]interface{}{
 		"username": username,
 	}).Take(&teamAdmin)
 	if result.RowsAffected == 0 {
-		return errors.New("No such a volunteer")
+		return errors.New("no such a volunteer")
 	} else if teamAdmin.Password != password {
 		// TODO md5 hash needed
-		return errors.New("Password error with username: " + username)
+		return errors.New("password error with username: " + username)
 	} else {
-		session.Set(teamAdmin.Username, teamAdmin.Password)
+		if teamAdmin.TeamID.Valid {
+			session.Set("teamid", teamAdmin.TeamID.Int64)
+		} else {
+			session.Set("teamid", -1)
+		}
+		session.Set("user", teamAdmin.Username)
+		session.Set("pass", teamAdmin.Password)
 		if err := session.Save(); err != nil {
 			return err
 		} else {

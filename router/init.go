@@ -5,6 +5,7 @@ import (
 
 	"github.com/dump-time/games-admin-server/global"
 	"github.com/dump-time/games-admin-server/log"
+	"github.com/dump-time/games-admin-server/middleware"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/redis"
 
@@ -47,6 +48,7 @@ func init() {
 	initBasicRouter(v1)
 	teamAPI := v1.Group("/team/:teamID")
 	{
+		teamAPI.Use(middleware.AuthCheck)
 		// TODO Add middle ware to check admin privilege
 		initVolunteerRouter(teamAPI)
 		initJobRouter(teamAPI)

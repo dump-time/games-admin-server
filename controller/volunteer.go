@@ -39,13 +39,8 @@ type UpdateVolunteerReq struct {
 
 func AddVolunteerController(context *gin.Context) {
 	teamIDRaw := context.Param("teamID")
+	teamID, _ := strconv.Atoi(teamIDRaw)
 
-	teamID, err := strconv.Atoi(teamIDRaw)
-	if err != nil {
-		log.Error(err)
-		util.ParamsErrResp(context)
-		return
-	}
 	var req AddVolunteerReq
 	if err := context.ShouldBindJSON(&req); err != nil {
 		log.Error(err)
@@ -89,12 +84,7 @@ func AddVolunteerController(context *gin.Context) {
 func ListVolunteersController(context *gin.Context) {
 	// Extract data from request
 	teamIDRaw := context.Param("teamID")
-	teamID, err := strconv.Atoi(teamIDRaw)
-	if err != nil {
-		log.Error(err)
-		util.ParamsErrResp(context)
-		return
-	}
+	teamID, _ := strconv.Atoi(teamIDRaw)
 	offsetRaw := context.DefaultQuery("offset", "0")
 	pageSizeRaw := context.DefaultQuery("page-size", "10")
 	offset, err := strconv.Atoi(offsetRaw)
@@ -168,12 +158,7 @@ func DeleteVolunteerController(context *gin.Context) {
 	teamIDRaw := context.Param("teamID")
 	volunteerIDRaw := context.Param("id")
 
-	teamID, err := strconv.Atoi(teamIDRaw)
-	if err != nil {
-		log.Error(err)
-		util.ParamsErrResp(context)
-		return
-	}
+	teamID, _ := strconv.Atoi(teamIDRaw)
 	volunteerID, err := strconv.Atoi(volunteerIDRaw)
 	if err != nil {
 		log.Error(err)
@@ -202,12 +187,7 @@ func UpdateVolunteerController(context *gin.Context) {
 	// Extract data from request
 	teamIDRaw := context.Param("teamID")
 	volunteerIDRaw := context.Param("id")
-	teamID, err := strconv.Atoi(teamIDRaw)
-	if err != nil {
-		log.Error(err)
-		util.ParamsErrResp(context)
-		return
-	}
+	teamID, _ := strconv.Atoi(teamIDRaw)
 	volunteerID, err := strconv.Atoi(volunteerIDRaw)
 	if err != nil {
 		log.Error(err)
@@ -264,12 +244,7 @@ func SearchVolunteerController(context *gin.Context) {
 	// Extract data from request
 	teamIDRaw := context.Param("teamID")
 	IDNumber := context.Param("IDNumber")
-	teamID, err := strconv.Atoi(teamIDRaw)
-	if err != nil {
-		log.Error(err)
-		util.ParamsErrResp(context)
-		return
-	}
+	teamID, _ := strconv.Atoi(teamIDRaw)
 	var nullableTeamID sql.NullInt64
 	if teamID == -1 {
 		nullableTeamID.Valid = false
@@ -278,8 +253,8 @@ func SearchVolunteerController(context *gin.Context) {
 		nullableTeamID.Valid = true
 	}
 
-	volunteer, error := services.SearchVolunteer(nullableTeamID, IDNumber)
-	if error != nil {
+	volunteer, err := services.SearchVolunteer(nullableTeamID, IDNumber)
+	if err != nil {
 		log.Error(err)
 		util.FailedResp(context, searchVolunteerErrorCode, "Update volunteer error")
 		return
