@@ -263,7 +263,7 @@ func SearchVolunteerController(context *gin.Context) {
 	volunteer, err := services.SearchVolunteer(nullableTeamID, IDNumber)
 	if err != nil {
 		log.Error(err)
-		util.FailedResp(context, searchVolunteerErrorCode, "Update volunteer error")
+		util.FailedResp(context, searchVolunteerErrorCode, "Search volunteer error")
 		return
 	}
 
