@@ -49,8 +49,10 @@ func GetAdminInfo(context *gin.Context) {
 	}
 	if adminInfo.TeamID.Valid {
 		resp["is_root"] = false
+		resp["team_id"] = adminInfo.TeamID.Int64
 	} else {
 		resp["is_root"] = true
+		resp["team_id"] = nil
 	}
 	util.SuccessResp(context, resp)
 }
