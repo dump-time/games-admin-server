@@ -103,7 +103,20 @@ func GetJobs(ctx *gin.Context) {
 		return
 	}
 
-	util.SuccessResp(ctx, jobs)
+	num, err := services.GetJobsNum(sql.NullInt64{
+		Int64: teamId,
+		Valid: teamId >= 0,
+	})
+	if err != nil {
+		_ = ctx.Error(err)
+		util.FailedResp(ctx, 4202, "Get Jobs num Failed")
+		return
+	}
+
+	util.SuccessResp(ctx, gin.H{
+		"num":  num,
+		"jobs": jobs,
+	})
 }
 
 func getID(ctx *gin.Context) (uint, error) {
