@@ -6,9 +6,6 @@ import (
 )
 
 func initTeamRouter(apiGroup *gin.RouterGroup) *gin.RouterGroup {
-	apiGroup.GET("/teams") // List all teams
-	apiGroup.PUT("/team")  // Create team
-
 	teamAPI := apiGroup.Group("/team/:teamID")
 	{
 		teamAPI.Use(middleware.AuthCheck)
@@ -16,6 +13,12 @@ func initTeamRouter(apiGroup *gin.RouterGroup) *gin.RouterGroup {
 		teamAPI.GET("/")    // Get team info
 		teamAPI.PATCH("/")  // Get team info
 		teamAPI.DELETE("/") // Get team info
+	}
+
+	apiGroup.Use(middleware.CheckRootPriviledge)
+	{
+		apiGroup.GET("/teams") // List all teams
+		apiGroup.POST("/team") // Create team
 	}
 
 	return teamAPI

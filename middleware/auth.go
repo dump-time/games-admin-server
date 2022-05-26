@@ -30,3 +30,16 @@ func AuthCheck(context *gin.Context) {
 		}
 	}
 }
+
+func CheckRootPriviledge(context *gin.Context) {
+	session := util.ContextSession(context)
+	teamIDSession := session.Get("teamid")
+	if teamIDSession == nil {
+		log.Info("not login")
+		util.NotLoginResp(context)
+	} else if teamIDSession != int64(-1) {
+		username := session.Get("user")
+		log.Error(fmt.Sprintf("user %v doesn't has enough priviledge", username))
+		util.NotAllowedResp(context)
+	}
+}
