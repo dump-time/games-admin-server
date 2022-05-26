@@ -14,8 +14,12 @@ func AddVolunteer(volunteer *model.Volunteer) error {
 }
 
 func ListVolunteers(teamID sql.NullInt64, offset int, pageSize int) ([]model.Volunteer, error) {
+	condition := map[string]interface{}{}
+	if teamID.Valid {
+		condition["team_id"] = teamID.Int64
+	}
 	var volunteers []model.Volunteer
-	result := global.DB.Where(map[string]interface{}{"team_id": teamID}).
+	result := global.DB.Where(condition).
 		Preload("Intention").
 		Preload("Job").
 		Limit(pageSize).Offset(offset).
@@ -24,10 +28,13 @@ func ListVolunteers(teamID sql.NullInt64, offset int, pageSize int) ([]model.Vol
 }
 
 func DeleteVolunteer(teamID sql.NullInt64, volunteerID uint) error {
-	result := global.DB.Where(map[string]interface{}{
-		"id":      volunteerID,
-		"team_id": teamID,
-	}).Delete(&model.Volunteer{})
+	condition := map[string]interface{}{
+		"id": volunteerID,
+	}
+	if teamID.Valid {
+		condition["team_id"] = teamID
+	}
+	result := global.DB.Where(condition).Delete(&model.Volunteer{})
 	if result.RowsAffected == 0 {
 		return errors.New("no such a volunteer in this team")
 	}
@@ -35,10 +42,13 @@ func DeleteVolunteer(teamID sql.NullInt64, volunteerID uint) error {
 }
 
 func UpdateVolunteer(teamID sql.NullInt64, volunteerID uint, volunteer *model.Volunteer) error {
-	result := global.DB.Model(&model.Volunteer{}).Where(map[string]interface{}{
-		"id":      volunteerID,
-		"team_id": teamID,
-	}).Updates(map[string]interface{}{
+	condition := map[string]interface{}{
+		"id": volunteerID,
+	}
+	if teamID.Valid {
+		condition["team_id"] = teamID
+	}
+	result := global.DB.Model(&model.Volunteer{}).Where(condition).Updates(map[string]interface{}{
 		"name":       volunteer.Name,
 		"gender":     volunteer.Gender,
 		"job_id":     volunteer.JobID,
@@ -59,12 +69,10 @@ func UpdateVolunteer(teamID sql.NullInt64, volunteerID uint, volunteer *model.Vo
 	return nil
 }
 
+// SearchVolunteer get volunteer data with user id card number
 func SearchVolunteer(teamID sql.NullInt64, IDNumber string) (model.Volunteer, error) {
 	var volunteer model.Volunteer
-	result := global.DB.Where(map[string]interface{}{
-		"team_id":   teamID,
-		"id_number": IDNumber,
-	}).Preload("Intention").Preload("Job").Take(&volunteer)
+	result := global.DB.Where("team_id = ?", teamID).Preload("Intention").Preload("Job").Take(&volunteer)
 	if result.Error != nil {
 		return volunteer, result.Error
 	} else if result.RowsAffected == 0 {
@@ -74,11 +82,14 @@ func SearchVolunteer(teamID sql.NullInt64, IDNumber string) (model.Volunteer, er
 	}
 }
 
+// GetVolunteersNum fetch all tuple's count in the table
 func GetVolunteersNum(teamID sql.NullInt64, pageSize int) (int64, error) {
 	var volunteersNum int64
-	global.DB.Model(&model.Volunteer{}).Where(map[string]interface{}{
-		"team_id": teamID,
-	}).Count(&volunteersNum)
+	condition := map[string]interface{}{}
+	if teamID.Valid {
+		condition["team_id"] = teamID.Int64
+	}
+	global.DB.Model(&model.Volunteer{}).Where(condition).Count(&volunteersNum)
 
 	return volunteersNum, nil
 }

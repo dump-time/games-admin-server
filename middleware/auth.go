@@ -14,19 +14,19 @@ func AuthCheck(context *gin.Context) {
 	teamIDSession := session.Get("teamid")
 	teamIDPath, err := strconv.Atoi(context.Param("teamID"))
 	if err != nil {
- 	  	log.Error(err)
+		log.Error(err)
 		util.ParamsErrResp(context)
 		return
 	}
 
-	if teamIDSession != teamIDPath {
+	if teamIDSession.(int64) != int64(teamIDPath) {
 		username := session.Get("user")
-		if username != nil {
-			log.Error(fmt.Sprintf("user %v doesn't has enough priviledge to access team %v", username, teamIDPath))
-			util.NotAllowedResp(context)
-		} else {
+		if username == nil {
 			log.Info("not login")
 			util.NotLoginResp(context)
+		} else if teamIDSession != int64(-1) {
+			log.Error(fmt.Sprintf("user %v doesn't has enough priviledge to access team %v", username, teamIDPath))
+			util.NotAllowedResp(context)
 		}
 		return
 	}

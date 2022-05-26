@@ -34,7 +34,7 @@ func CheckAuth(context *gin.Context, username string, password string) error {
 		if teamAdmin.TeamID.Valid {
 			session.Set("teamid", teamAdmin.TeamID.Int64)
 		} else {
-			session.Set("teamid", -1)
+			session.Set("teamid", int64(-1))
 		}
 		session.Set("user", teamAdmin.Username)
 		session.Set("pass", teamAdmin.Password)
