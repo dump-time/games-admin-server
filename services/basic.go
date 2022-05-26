@@ -6,6 +6,7 @@ import (
 	"github.com/dump-time/games-admin-server/global"
 	"github.com/dump-time/games-admin-server/model"
 	"github.com/dump-time/games-admin-server/util"
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
 
@@ -20,7 +21,7 @@ func CheckAuth(context *gin.Context, username string, password string) error {
 			return nil
 		}
 	}
-var teamAdmin model.TeamAdmin
+	var teamAdmin model.TeamAdmin
 	result := global.DB.Where(map[string]interface{}{
 		"username": username,
 	}).Take(&teamAdmin)
@@ -43,4 +44,18 @@ var teamAdmin model.TeamAdmin
 			return nil
 		}
 	}
+}
+
+func ExtractAdminInfo(session sessions.Session) (model.TeamAdmin, error) {
+	var admin model.TeamAdmin
+
+	username := session.Get("user")
+	if username == nil {
+		return admin, errors.New("not login")
+	}
+
+	global.DB.Where(map[string]interface{}{
+		"username": username,
+	}).Take(&admin)
+	return admin, nil
 }

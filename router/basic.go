@@ -7,5 +7,6 @@ import (
 
 func initBasicRouter(apiGroup *gin.RouterGroup) *gin.RouterGroup {
 	apiGroup.POST("/login", controller.LoginController)
+	apiGroup.GET("/info", controller.GetAdminInfo)
 	return apiGroup
 }

@@ -13,7 +13,8 @@ type LoginReq struct {
 }
 
 const (
-	loginErrorCode int = 4301
+	loginErrorCode   int = 4301
+	GetInfoErrorCode int = 4302
 )
 
 func LoginController(context *gin.Context) {
@@ -32,4 +33,24 @@ func LoginController(context *gin.Context) {
 	}
 
 	util.SuccessResp(context, nil)
+}
+
+func GetAdminInfo(context *gin.Context) {
+	session := util.ContextSession(context)
+	adminInfo, err := services.ExtractAdminInfo(session)
+	if err != nil {
+		log.Error(err)
+		util.FailedResp(context, GetInfoErrorCode, err.Error())
+		return
+	}
+
+	resp := gin.H{
+		"username": adminInfo.Username,
+	}
+	if adminInfo.TeamID.Valid {
+		resp["is_root"] = false
+	} else {
+		resp["is_root"] = true
+	}
+	util.SuccessResp(context, resp)
 }
