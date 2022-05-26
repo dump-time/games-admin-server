@@ -19,15 +19,14 @@ func AuthCheck(context *gin.Context) {
 		return
 	}
 
-	if teamIDSession.(int64) != int64(teamIDPath) {
-		username := session.Get("user")
-		if username == nil {
-			log.Info("not login")
-			util.NotLoginResp(context)
-		} else if teamIDSession != int64(-1) {
+	if teamIDSession == nil {
+		log.Info("not login")
+		util.NotLoginResp(context)
+	} else if teamIDSession.(int64) != int64(teamIDPath) {
+		if teamIDSession != int64(-1) {
+			username := session.Get("user")
 			log.Error(fmt.Sprintf("user %v doesn't has enough priviledge to access team %v", username, teamIDPath))
 			util.NotAllowedResp(context)
 		}
-		return
 	}
 }
