@@ -18,7 +18,7 @@ func initTeamRouter(apiGroup *gin.RouterGroup) *gin.RouterGroup {
 
 	apiGroup.Use(middleware.CheckRootPriviledge)
 	{
-		apiGroup.GET("/teams") // List all teams
+		apiGroup.GET("/teams", controller.ListTeamsController)  // List all teams
 		apiGroup.POST("/team", controller.CreateTeamController) // Create team
 	}
 
