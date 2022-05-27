@@ -62,7 +62,7 @@ func ListTeamsController(context *gin.Context) {
 	teams, num, err := services.ListTeams(offset, pageSize)
 	if err != nil {
 		log.Error(err)
-		util.FailedResp(context, listVolunteerErrorCode, "List team error")
+		util.FailedResp(context, listTeamErrorCode, "List team error")
 		return
 	}
 
