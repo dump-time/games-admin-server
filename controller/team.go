@@ -18,6 +18,8 @@ type CreateTeamReq struct {
 
 const (
 	createTeamErrorCode = 4401
+	listTeamErrorCode   = 4402
+	deleteTeamErrorCode = 4403
 )
 
 func CreateTeamController(context *gin.Context) {
@@ -60,7 +62,7 @@ func ListTeamsController(context *gin.Context) {
 	teams, num, err := services.ListTeams(offset, pageSize)
 	if err != nil {
 		log.Error(err)
-		util.ParamsErrResp(context)
+		util.FailedResp(context, listVolunteerErrorCode, "List team error")
 		return
 	}
 
@@ -77,4 +79,25 @@ func ListTeamsController(context *gin.Context) {
 		"num":   num,
 		"teams": teamData,
 	})
+}
+
+func DeleteTeamController(context *gin.Context) {
+	teamIDRaw := context.Param("teamID")
+	teamID, _ := strconv.Atoi(teamIDRaw)
+
+	if err := services.DeleteTeam(uint(teamID)); err != nil {
+		log.Error(err)
+		util.FailedResp(context, deleteTeamErrorCode, "Delete team error")
+		return
+	}
+
+	util.SuccessResp(context, nil)
+}
+
+func UpdateTeamController(context *gin.Context) {
+
+}
+
+func GetTeamInfoController(context *gin.Context) {
+
 }

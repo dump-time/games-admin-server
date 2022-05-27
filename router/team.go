@@ -11,9 +11,9 @@ func initTeamRouter(apiGroup *gin.RouterGroup) *gin.RouterGroup {
 	{
 		teamAPI.Use(middleware.AuthCheck)
 
-		teamAPI.GET("/")    // Get team info
-		teamAPI.PATCH("/")  // update team info
-		teamAPI.DELETE("/") // Delte team
+		teamAPI.GET("/", controller.GetTeamInfoController)   // Get team info
+		teamAPI.PATCH("/", controller.UpdateTeamController)  // update team info
+		teamAPI.DELETE("/", controller.DeleteTeamController) // Delte team
 	}
 
 	apiGroup.Use(middleware.CheckRootPriviledge)
