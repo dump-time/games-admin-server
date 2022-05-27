@@ -27,3 +27,12 @@ func DeleteTeam(teamID uint) error {
 
 	return result.Error
 }
+
+func GetTeamInfo(teamID uint) (model.Team, error) {
+	var team model.Team
+	result := global.DB.Where(map[string]interface{}{
+		"id": teamID,
+	}).Take(&team)
+
+	return team, result.Error
+}
