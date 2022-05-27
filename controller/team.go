@@ -8,9 +8,16 @@ import (
 	"github.com/dump-time/games-admin-server/services"
 	"github.com/dump-time/games-admin-server/util"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 type CreateTeamReq struct {
+	Name         string `json:"name"`
+	Organization string `json:"organization"`
+	Code         string `json:"code"`
+}
+
+type UpdateTeamReq struct {
 	Name         string `json:"name"`
 	Organization string `json:"organization"`
 	Code         string `json:"code"`
@@ -21,6 +28,7 @@ const (
 	listTeamErrorCode    = 4402
 	deleteTeamErrorCode  = 4403
 	getTeamInfoErrorCode = 4404
+	updateTeamErrorCode  = 4405
 )
 
 func CreateTeamController(context *gin.Context) {
@@ -96,7 +104,29 @@ func DeleteTeamController(context *gin.Context) {
 }
 
 func UpdateTeamController(context *gin.Context) {
+	teamIDRaw := context.Param("teamID")
+	teamID, _ := strconv.Atoi(teamIDRaw)
+	var req UpdateTeamReq
+	if err := context.ShouldBindJSON(&req); err != nil {
+		log.Error(err)
+		util.ParamsErrResp(context)
+		return
+	}
 
+	if err := services.UpdateTeam(&model.Team{
+		Model: gorm.Model{
+			ID: uint(teamID),
+		},
+		Name:         req.Name,
+		Organization: req.Organization,
+		Code:         req.Code,
+	}); err != nil {
+		log.Error(err)
+		util.FailedResp(context, updateTeamErrorCode, "Update team error")
+		return
+	}
+
+	util.SuccessResp(context, nil)
 }
 
 func GetTeamInfoController(context *gin.Context) {

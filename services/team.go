@@ -1,6 +1,8 @@
 package services
 
 import (
+	"errors"
+
 	"github.com/dump-time/games-admin-server/global"
 	"github.com/dump-time/games-admin-server/model"
 )
@@ -26,6 +28,15 @@ func DeleteTeam(teamID uint) error {
 	}).Delete(&model.Team{})
 
 	return result.Error
+}
+
+func UpdateTeam(team *model.Team) error {
+	result := global.DB.Model(team).Updates(*team)
+	if result.RowsAffected == 0 {
+		return errors.New("no such a team")
+	} else {
+		return result.Error
+	}
 }
 
 func GetTeamInfo(teamID uint) (model.Team, error) {
