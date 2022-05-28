@@ -78,6 +78,7 @@ func ListTeamsController(context *gin.Context) {
 	var teamData []gin.H
 	for _, team := range teams {
 		teamData = append(teamData, gin.H{
+			"id":           team.ID,
 			"name":         team.Name,
 			"organization": team.Organization,
 			"code":         team.Code,
@@ -141,6 +142,7 @@ func GetTeamInfoController(context *gin.Context) {
 	}
 
 	util.SuccessResp(context, gin.H{
+		"id":           team.ID,
 		"name":         team.Name,
 		"organization": team.Organization,
 		"code":         team.Code,
