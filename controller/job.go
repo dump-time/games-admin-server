@@ -99,7 +99,7 @@ func GetJobs(ctx *gin.Context) {
 		return
 	}
 	if len(jobs) == 0 {
-		util.NotFoundResp(ctx)
+		util.SuccessResp(ctx, nil)
 		return
 	}
 
@@ -153,7 +153,7 @@ func DeleteJob(ctx *gin.Context) {
 		return
 	}
 	if rows == 0 {
-		util.NotFoundResp(ctx)
+		util.SuccessResp(ctx, nil)
 		return
 	}
 
@@ -197,7 +197,7 @@ func UpdateJob(ctx *gin.Context) {
 		util.ParamsErrResp(ctx)
 		return
 	} else if rows == 0 {
-		util.NotFoundResp(ctx)
+		util.SuccessResp(ctx, nil)
 		return
 	}
 
