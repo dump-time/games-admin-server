@@ -36,9 +36,7 @@ func GetJobs(teamId sql.NullInt64, offset int, pageSize int) (Jobs, error) {
 
 func GetJobsNum(teamId sql.NullInt64) (int64, error) {
 	var count int64
-	err := global.DB.Model(model.Job{
-		TeamID: teamId,
-	}).Count(&count).Error
+	err := global.DB.Model(model.Job{}).Where(model.Job{TeamID: teamId}).Count(&count).Error
 
 	return count, err
 }

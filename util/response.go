@@ -32,11 +32,10 @@ func NotAllowedResp(context *gin.Context) {
 	FailedResp(context, 4002, "not allow!")
 }
 
-
 func NotLoginResp(context *gin.Context) {
 	FailedResp(context, 4003, "not login!")
 }
 
 func NotFoundResp(context *gin.Context) {
-	FailedResp(context, 404, "Not Found")
+	FailedResp(context, 4004, "Not Found")
 }
