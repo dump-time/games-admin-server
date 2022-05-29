@@ -41,6 +41,13 @@ func GetJobsNum(teamId sql.NullInt64) (int64, error) {
 	return count, err
 }
 
+func GetAllJobs(offset int, pageSize int) (Jobs, error) {
+	var results Jobs
+	err := global.DB.Limit(pageSize).Offset(offset).Model(model.Job{}).Error
+
+	return results, err
+}
+
 func DeleteJob(teamId sql.NullInt64, id uint) (int64, error) {
 	result := global.DB.Delete(
 		&model.Job{

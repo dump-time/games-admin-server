@@ -89,6 +89,21 @@ func GetJobs(ctx *gin.Context) {
 		return
 	}
 
+	// Super Admin
+	if teamId == -1 {
+		jobs, err := services.GetAllJobs(offset, pageSize)
+		if err != nil {
+			_ = ctx.Error(err)
+			util.FailedResp(ctx, 4202, "Get Jobs Failed")
+			return
+		}
+		util.SuccessResp(ctx, gin.H{
+			"num":  len(jobs),
+			"jobs": jobs,
+		})
+		return
+	}
+
 	jobs, err := services.GetJobs(sql.NullInt64{
 		Int64: teamId,
 		Valid: teamId >= 0,
