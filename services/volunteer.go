@@ -72,7 +72,11 @@ func UpdateVolunteer(teamID sql.NullInt64, volunteerID uint, volunteer *model.Vo
 // SearchVolunteer get volunteer data with user id card number
 func SearchVolunteer(teamID sql.NullInt64, IDNumber string) (model.Volunteer, error) {
 	var volunteer model.Volunteer
-	result := global.DB.Where("team_id = ?", teamID).Preload("Intention").Preload("Job").Take(&volunteer)
+	condition := map[string]interface{}{
+		"id_number": IDNumber,
+		"team_id":   teamID,
+	}
+	result := global.DB.Where(condition).Preload("Intention").Preload("Job").Take(&volunteer)
 	if result.Error != nil {
 		return volunteer, result.Error
 	} else if result.RowsAffected == 0 {
