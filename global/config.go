@@ -2,7 +2,7 @@ package global
 
 import (
 	"github.com/dump-time/games-admin-server/log"
-	"gopkg.in/yaml.v3"
+	"gopkg.in/yaml.v2"
 	"os"
 )
 
@@ -37,4 +37,5 @@ func initConfig() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	log.Info(Config)
 }
