@@ -16,7 +16,9 @@ func ListTeams(offset int, pageSize int) ([]model.Team, int64, error) {
 	var teams []model.Team
 	var num int64
 
-	global.DB.Limit(pageSize).Offset(offset).Find(&teams)
+	// global.DB.Limit(pageSize).Offset(offset).Find(&teams)
+	global.DB.Raw("SELECT * FROM `volunteers` WHERE `volunteers`.`deleted_at` IS NULL " +
+	 "AND id >= (SELECT id FROM volunteers limit 1 OFFSET ?) LIMIT ?", offset, pageSize).Scan(&teams)
 	global.DB.Model(&model.Team{}).Count(&num)
 
 	return teams, num, nil
