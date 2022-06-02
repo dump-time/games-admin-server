@@ -29,8 +29,8 @@ func ListVolunteers(teamID sql.NullInt64, offset int, pageSize int) ([]model.Vol
 			Find(&volunteers)
 	} else {
 		result = global.DB.Debug().Where(
-			"team_id IS NULL and id >= (?)", 
-			global.DB.Raw("SELECT id FROM volunteers WHERE team_id is null and deleted_at IS NULL limit 1 OFFSET ?", 
+			"id >= (?)", 
+			global.DB.Raw("SELECT id FROM volunteers WHERE deleted_at IS NULL limit 1 OFFSET ?", 
 				offset)).
 			Preload("Intention").
 			Preload("Job").
