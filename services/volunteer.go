@@ -6,6 +6,7 @@ import (
 
 	"github.com/dump-time/games-admin-server/global"
 	"github.com/dump-time/games-admin-server/model"
+	"gorm.io/gorm"
 )
 
 func AddVolunteer(volunteer *model.Volunteer) error {
@@ -14,16 +15,29 @@ func AddVolunteer(volunteer *model.Volunteer) error {
 }
 
 func ListVolunteers(teamID sql.NullInt64, offset int, pageSize int) ([]model.Volunteer, error) {
-	condition := map[string]interface{}{}
-	if teamID.Valid {
-		condition["team_id"] = teamID.Int64
-	}
 	var volunteers []model.Volunteer
-	result := global.DB.Where(condition).
-		Preload("Intention").
-		Preload("Job").
-		Limit(pageSize).Offset(offset).
-		Find(&volunteers)
+	var result *gorm.DB
+	if teamID.Valid {
+		result = global.DB.Debug().Where(
+			"team_id = ? and id >= (?)", 
+			teamID, 
+			global.DB.Raw("SELECT id FROM volunteers WHERE team_id = ? and deleted_at IS NULL limit 1 OFFSET ?", 
+				teamID.Int64, offset)).
+			Preload("Intention").
+			Preload("Job").
+			Limit(pageSize).
+			Find(&volunteers)
+	} else {
+		result = global.DB.Debug().Where(
+			"team_id IS NULL and id >= (?)", 
+			global.DB.Raw("SELECT id FROM volunteers WHERE team_id is null and deleted_at IS NULL limit 1 OFFSET ?", 
+				offset)).
+			Preload("Intention").
+			Preload("Job").
+			Limit(pageSize).
+			Find(&volunteers)
+	}
+	
 	return volunteers, result.Error
 }
 
