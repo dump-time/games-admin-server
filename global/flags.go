@@ -4,15 +4,57 @@
 
 package global
 
-import "flag"
+import (
+	"fmt"
+	"os"
 
-// DaemonMode daemonMode run server in daemon mode
-var DaemonMode = flag.Bool("d", false, "Run server in daemon mode")
+	"github.com/dump-time/games-admin-server/log"
+	"github.com/jessevdk/go-flags"
+	"github.com/xuri/excelize/v2"
+)
 
-// ConfigPath custom config file path
-var ConfigPath = flag.String("config", "./config.yml", "The config file path")
+var CmdOpts struct {
+	DaemonMode bool `short:"d" long:"daemon" description:"Running on daemon mode"`
+	ConfigPath string `short:"c" long:"config" description:"The config file path" required:"true"`
+	TeamAdminExcelPath string `long:"excel" description:"The team admin info excel file path" required:"true"`
+}
+
+func importTeamAdmin(excelFilePath string) error {
+	f, err := excelize.OpenFile(excelFilePath)
+	if err != nil {
+		return err
+	}
+
+	// Get all the rows in the Sheet1.
+	rows, err := f.GetRows("Sheet1")
+	if err != nil {
+		return err
+	}
+
+	// Extract data from excel
+	for _, row := range rows {
+		for _, colCell := range row {
+			fmt.Print(colCell, "\t")
+		}
+		fmt.Println()
+	}
+
+	// Close the spreadsheet.
+	if err := f.Close(); err != nil {
+		return err
+	}
+	return nil
+}
 
 func initFlag() {
 	// init flags
-	flag.Parse()
+	_, err := flags.ParseArgs(&CmdOpts, os.Args)
+	if err != nil {
+		os.Exit(-1)
+	}
+
+	if err := importTeamAdmin(CmdOpts.TeamAdminExcelPath); err != nil {
+		log.Error(err)
+		os.Exit(-1)
+	}
 }

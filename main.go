@@ -17,7 +17,7 @@ func main() {
 	server := endless.NewServer(global.Config.Serv.Addr, router.R)
 
 	// daemon mode
-	if *global.DaemonMode {
+	if global.CmdOpts.DaemonMode {
 		server.BeforeBegin = func(add string) {
 			// stdout pid
 			pid := os.Getpid()

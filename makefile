@@ -18,12 +18,12 @@ stop:
 
 .PHONY: start
 start: stop build
-	@nohup $(OUTPUT_DIR)/$(OUTPUT_BIN) -d > $(LOG_FILE) 2>&1 & echo $$! > $(PID_FILE)
+	@nohup $(OUTPUT_DIR)/$(OUTPUT_BIN) -d --excel "./data/team_admins.xlsx" --config "./data/config.yml" > $(LOG_FILE) 2>&1 & echo $$! > $(PID_FILE)
 	@echo "Server started, all file is in dist directory"
 
 .PHONY: run
 run: build
-	@$(OUTPUT_DIR)/$(OUTPUT_BIN)
+	@$(OUTPUT_DIR)/$(OUTPUT_BIN) --excel "./data/team_admins.xlsx" --config "./data/config.yml"
 
 .PHONY: clean
 clean: stop

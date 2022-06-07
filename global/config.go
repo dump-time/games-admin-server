@@ -29,7 +29,7 @@ type configType struct {
 var Config configType
 
 func initConfig() {
-	configFile, err := os.ReadFile(*ConfigPath)
+	configFile, err := os.ReadFile(CmdOpts.ConfigPath)
 	if err != nil {
 		log.Fatal(err)
 	}

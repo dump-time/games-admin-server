@@ -29,9 +29,15 @@ make build
 
 ### 配置文件 ⚙️
 
-本程序通过 -config 参数指定配置文件路径，其中 config 文件路径默认为当前目录下的 config.yml
+本程序通过 --config 参数指定配置文件路径
 
-项目根目录下有一个 config.example.yml 的文件，是配置文件的模板。
+项目 data 目录下有一个 config.example.yml 的文件，是配置文件的模板。
+
+### 管理员数据 👮
+
+本程序通过 --excel 参数指定管理员数据excel表的路径
+
+项目 data 目录下有一个 team_admins.example.xlsx 的文件，是管理员信息文件的模板。
 
 ### 后台服务 🐸
 
