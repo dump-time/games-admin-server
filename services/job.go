@@ -60,12 +60,11 @@ func DeleteJob(teamId sql.NullInt64, id uint) (int64, error) {
 	return result.RowsAffected, result.Error
 }
 
-func UpdateJob(id uint, teamID sql.NullInt64, job *model.Job) (int64, error) {
+func UpdateJob(id uint, job *model.Job) (int64, error) {
 	result := global.DB.Model(model.Job{
 		Model: gorm.Model{
 			ID: id,
 		},
-		TeamID: teamID,
 	}).
 		Updates(job)
 	return result.RowsAffected, result.Error

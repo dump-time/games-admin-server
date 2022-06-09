@@ -3,6 +3,7 @@ package controller
 import (
 	"database/sql"
 	"errors"
+	"github.com/dump-time/games-admin-server/log"
 	"github.com/dump-time/games-admin-server/model"
 	"github.com/dump-time/games-admin-server/services"
 	"github.com/dump-time/games-admin-server/util"
@@ -204,17 +205,27 @@ func UpdateJob(ctx *gin.Context) {
 		return
 	}
 
-	mod := &model.Job{
-		Name:     req.Name,
-		Content:  req.Content,
-		Location: req.Location,
-		TeamID: sql.NullInt64{Int64: req.TeamID,
-			Valid: teamId >= 0},
+	var mod *model.Job
+	if teamId == -1 {
+		mod = &model.Job{
+			Name:     req.Name,
+			Content:  req.Content,
+			Location: req.Location,
+			TeamID: sql.NullInt64{Int64: req.TeamID,
+				Valid: req.TeamID >= 0},
+		}
+	} else {
+		mod = &model.Job{
+			Name:     req.Name,
+			Content:  req.Content,
+			Location: req.Location,
+		}
 	}
+
+	log.Info(mod)
 
 	rows, err := services.UpdateJob(
 		id,
-		sql.NullInt64{Int64: teamId, Valid: teamId >= 0},
 		mod)
 	if err != nil {
 		_ = ctx.Error(err)
