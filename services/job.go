@@ -19,6 +19,7 @@ type Jobs []struct {
 	Name      string    `json:"name"`
 	Content   string    `json:"content"`
 	Location  string    `json:"location"`
+	TeamID    *int64    `json:"teamID"`
 }
 
 func GetJobs(teamId sql.NullInt64, offset int, pageSize int) (Jobs, error) {
