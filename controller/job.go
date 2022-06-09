@@ -175,6 +175,13 @@ func DeleteJob(ctx *gin.Context) {
 	util.SuccessResp(ctx, nil)
 }
 
+type updateRequest struct {
+	Name     string `json:"name"`
+	Content  string `json:"content"`
+	Location string `json:"location"`
+	TeamID   int64  `json:"team_id"`
+}
+
 func UpdateJob(ctx *gin.Context) {
 	teamId, err := getTeamID(ctx)
 	if err != nil {
@@ -190,7 +197,7 @@ func UpdateJob(ctx *gin.Context) {
 		return
 	}
 
-	var req addRequest
+	var req updateRequest
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		_ = ctx.Error(err)
 		util.ParamsErrResp(ctx)
@@ -201,6 +208,8 @@ func UpdateJob(ctx *gin.Context) {
 		Name:     req.Name,
 		Content:  req.Content,
 		Location: req.Location,
+		TeamID: sql.NullInt64{Int64: req.TeamID,
+			Valid: teamId >= 0},
 	}
 
 	rows, err := services.UpdateJob(
